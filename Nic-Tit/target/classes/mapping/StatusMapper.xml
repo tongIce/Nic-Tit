@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.litt.nic.mapper.StatusMapper" >
+  <resultMap id="BaseResultMap" type="status" >
+    <id column="status_id" property="statusId" jdbcType="INTEGER" />
+    <result column="status_name" property="statusName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    status_id, status_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from nic_status
+    where status_id = #{statusId,jdbcType=INTEGER}
+  </select>
+  <select id="findAllStatus" resultMap="BaseResultMap" >
+    select *
+    from nic_status
+  </select>
+  <select id="findByName" resultMap="BaseResultMap" >
+    select *
+    from nic_status
+    where status_name=#{statusName,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from nic_status
+    where status_id = #{statusId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="status" >
+    insert into nic_status (status_id, status_name)
+    values (#{statusId,jdbcType=INTEGER}, #{statusName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="status" >
+    insert into nic_status
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="statusId != null" >
+        status_id,
+      </if>
+      <if test="statusName != null" >
+        status_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="statusId != null" >
+        #{statusId,jdbcType=INTEGER},
+      </if>
+      <if test="statusName != null" >
+        #{statusName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="status" >
+    update nic_status
+    <set >
+      <if test="statusName != null" >
+        status_name = #{statusName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where status_id = #{statusId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="status" >
+    update nic_status
+    set status_name = #{statusName,jdbcType=VARCHAR}
+    where status_id = #{statusId,jdbcType=INTEGER}
+  </update>
+</mapper>

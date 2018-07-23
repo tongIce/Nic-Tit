@@ -1,0 +1,312 @@
+/***************************Content***********************/
+html,body{
+	margin:0 auto;
+    position:relative;
+    width:900px;
+    background:#fff;
+}
+
+.container-fluid{
+    padding-top:70px;
+    padding-bottom:50px;
+    position:relative;
+    width:100%;
+}
+
+/******************************Common table*****************************/
+table{
+	text-align:center;
+}
+table tr{
+	height:29px;
+}
+
+table tr td{
+	border-right:1px solid #dcdce0;
+	overflow: visible;
+    word-wrap:break-word;
+    word-break:break-all; 
+    white-space: pre-wrap
+}
+
+table tr td:last-child{
+	border-right:none;
+}
+
+.layout-table{
+	margin-bottom:50px;
+}
+
+.layout-table .tbl-bottom{
+	border-top:none;
+}
+
+.tbl-content table tr td:last-child:hover{
+	background-color:#d9e4f5;
+}
+
+.layout-table .layout-table-header.blue{
+	background:#6090df;
+	color:#fff;
+	border-color:#fff;
+	border-right-color:#6090df;
+	height:60px;
+	font-size:16px;
+}
+
+.layout-table .layout-table-header.blue span{
+	line-height:50px;
+}
+
+.layout-table .layout-table-content .tbl-header.blue{
+	width:869px;
+	font-size:14px;
+}
+
+.layout-table .layout-table-content .tbl-header table tr td.blue{
+	background:#6090df;
+	border-color:#fff;
+	overflow: visible;
+}
+
+.layout-table .layout-table-content .tbl-header table tr td:last-child{
+	border-right:1px solid #6090df;
+}
+
+.layout-table .layout-table-content .tbl-header table tr td.blue span{
+	color:#fff;
+	font-size:15px;
+}
+
+.layout-table .layout-table-content .tbl-header table tr td.input-top{
+	position:relative;
+}
+
+.layout-table .layout-table-content .tbl-header table tr td.input-top .checkbox-wrapper{
+	display: inline-block;
+	position:absolute;
+	top:10px;
+	left:10px;
+	width: 12px;
+    height: 12px;
+    z-index:10;
+    background:#fff;
+    border:1px solid #ccc;
+    border-radius: 2px;
+    cursor:pointer;
+}
+
+.layout-table .layout-table-content .tbl-header table tr td.input-top .checked{
+	display: inline-block;
+	position:absolute;
+	top:11px;
+	left:13px;
+	width: 6px;
+    height: 9px;
+    z-index:20;
+    border:3px solid #6090df;
+    border-left:0;
+    border-top:0;
+    cursor:pointer;
+    
+    transform:rotate(45deg);
+	-ms-transform:rotate(45deg); 	/* IE 9 */
+	-moz-transform:rotate(45deg); 	/* Firefox */
+	-webkit-transform:rotate(45deg); /* Safari 和 Chrome */
+	-o-transform:rotate(45deg); 	/* Opera */
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.blue{
+	background:#6090df;
+	color:#fff;
+	border-bottom:1px solid #fff;
+	font-size:14px;
+	overflow: visible;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.bf{
+	cursor:default;
+	color:#333;
+	background:#ebf1fb;
+	border:1px solid #fff;
+	border-right:0;
+    white-space: pre-wrap;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.first{
+	border-left:0;
+}
+
+
+.layout-table .layout-table-content .tbl-content table tr td.hf{
+	cursor:pointer;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.input-bf{
+	cursor:pointer;
+	color:#333;
+	background:#ebf1fb;
+	border:1px solid #fff;
+	border-right:0;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.remove-bf{
+	cursor:pointer;
+	color:#6090df;
+	background:#ebf1fb;
+	border:1px solid #fff;
+	border-right:0;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.remove-bf:hover{
+	color:#2a73ec;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.input-bf:hover{
+	color:#6090df;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.input-box .checkbox{
+	display:inline-block;
+	margin-left:5px;
+}
+
+.layout-table .layout-table-content .tbl-header table tr.bt{
+	border-bottom-color:#6090df;
+}
+
+.layout-table .layout-table-content .tbl-header table tr.top-tr{
+	border-bottom:0;
+}
+
+.layout-table .layout-table-content .tbl-header table tr.head-tr{
+	border-bottom:0;
+}
+
+.layout-table .layout-table-content .tbl-header table tr.top-tr  td.top-td{
+	border-top:1px solid #fff;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.bt{
+	border-bottom-color:#6090df;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.no-tp{
+	border-top:none;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.no-bt{
+	border-bottom:none;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.lf{
+	text-align:left;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.bf:hover{
+	color:#6090df;
+}
+
+.layout-table .layout-table-content .tbl-content table tr td.last{
+	border-bottom:0;
+}
+
+
+/******************************产品结构table*****************************/
+
+
+
+/******************************返回button*****************************/
+.back-btn{
+	position:absolute;
+	top:30px;
+	left:15px;
+	padding-left:30px;
+}
+
+.back-btn:before{
+	position:absolute;
+	top:9px;
+	left:12px;
+	content:"";
+	width:7px;
+	height:7px;
+	border-top:1px solid #fff;
+	border-left:1px solid #fff;
+	
+	transform:rotate(-45deg);
+	-ms-transform:rotate(-45deg); 	/* IE 9 */
+	-moz-transform:rotate(-45deg); 	/* Firefox */
+	-webkit-transform:rotate(-45deg); /* Safari 和 Chrome */
+	-o-transform:rotate(-45deg); 	/* Opera */
+}
+
+/******************************组织能力打造table*****************************/
+
+
+
+/******************************报价汇总表*****************************/
+.total{
+	position:relative;
+}
+
+.total .layout-table-content{
+	overflow-x:scroll;
+}
+
+.total .layout-table-content .total-header{
+	overflow:visible;
+}
+
+.total .layout-table-content .total-content{
+	overflow:visible;
+}
+
+
+/******************************员工敬业度/满意度及其他调研table*****************************/
+.two .layout-table-content .tbl-content table tr td.input-bf input.form-control{
+	display:inline-block;
+	max-width:150px;
+}
+
+.two .layout-table-content .tbl-content table tr td.input-bf .tx-label{
+	display:inline-block;
+}
+
+.two .layout-table-content .tbl-header table tr td.input-top .checkbox-wrapper {
+    left: 27px;
+}
+
+.two .layout-table-content .tbl-header table tr td.input-top .checked {
+    left: 30px;
+}
+
+
+/******************************企业文化建设*****************************/
+.three .layout-table-content .tbl-content table tr td.input-bf input.form-control{
+	display:inline-block;
+	max-width:150px;
+}
+
+.three .layout-table-content .tbl-content table tr td.input-bf .tx-label{
+	display:inline-block;
+}
+
+.three .layout-table-content .tbl-header table tr td.input-top .checkbox-wrapper {
+    left: 27px;
+}
+
+.three .layout-table-content .tbl-header table tr td.input-top .checked {
+    left: 30px;
+}
+
+
+
+/********************************3P（岗位/薪酬/绩效）***************************/
+.four .layout-table-content .tbl-header table tr td.input-top .checkbox-wrapper {
+    left: 30px;
+}
+
+.four .layout-table-content .tbl-header table tr td.input-top .checked {
+    left: 33px;
+}

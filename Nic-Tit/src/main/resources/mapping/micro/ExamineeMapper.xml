@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.litt.micro.mapper.ExamineeMapper">
+	
+	<!-- 基础的studentResultmap -->
+	<resultMap type="student" id="stuResultMap">
+		<id column="stu_id" property="stuId"/>
+		<result column="stu_openId" property="stuOpenid"/>
+		<result column="stu_name" property="stuName"/>
+		<result column="stu_cardNumber" property="stuCardNumber"/>
+		<result column="stu_college" property="stuCollege"/>
+		<result column="stu_profession" property="stuProfession"/>
+		<result column="stu_grade" property="stuGrade"/>
+		<result column="stu_class" property="stuClass"/>
+		<result column="stu_sex" property="stuSex"/>
+		<result column="stu_born" property="stuBorn"/>
+		<result column="stu_IDnum" property="stuIDnum"/>
+		<result column="stu_phone" property="stuPhone"/>
+	</resultMap>
+	<!-- 考生信息返回map -->
+	<resultMap type="examinee" id="exResultMap">
+		<id column="ex_id" property="exId"/>
+		<result column="ex_openid" property="exOpenid"/>
+		<result column="ex_admissionTicket" property="exAdmissionTicket"/>
+		<result column="ex_enterNumber" property="exEnterNumber"/>
+		<result column="ex_number" property="exNumber"/>
+		<result column="ex_name" property="exName"/>
+		<result column="ex_sex" property="exSex"/>
+		<result column="ex_born" property="exBorn"/>
+		<result column="ex_IDcard" property="exIDcard"/>
+		<result column="ex_nation" property="exNation"/>
+		<result column="ex_tele" property="exTele"/>
+		<result column="ex_level" property="exLevel"/>
+		<result column="ex_type" property="exType"/>
+		<result column="ex_examRoom" property="exExamRoom"/>
+		<result column="ex_batchNum" property="exBatchNum"/>
+		<result column="ex_degree" property="exDegree"/>
+		<result column="ex_profession" property="exProfession"/>
+		<result column="ex_note" property="exNote"/>
+		<result column="ex_img" property="exImg"/>
+	</resultMap>
+	
+	<!-- 根据name和number查找出学生 -->
+	<select id="findExamineeByNumName"  resultMap="exResultMap" >
+		select
+		micro_examinee.*
+		from micro_examinee
+		where ex_name  = #{0} and ex_number  = #{1};
+	</select>
+	<select id="findStudentByOpenid" parameterType="String" resultMap="stuResultMap">
+		select 
+		micro_student.*
+		from micro_student
+		where stu_openId = #{openid}
+	</select>
+	<!-- 根据名族代码查询，名族名字 -->
+	<select id="findNation" parameterType="String" resultType="String">
+		select micro_nation.na_name
+		from micro_nation
+		where na_number = #{number}
+	</select>
+	<!-- 根据报考类型代码，查询type -->
+	<select id="findExamType" parameterType="Integer" resultType="String">
+		select micro_examtype.type_name
+		from micro_examtype
+		where type_number = #{parse}
+	</select>
+	
+	
+	<!-- 将获取到的openid和student表关联 -->
+	<insert id="saveOpenId" >
+		update micro_student
+		set stu_openId = #{0} 
+		where stu_name =#{1}  and stu_cardNumber = #{2}
+	</insert>
+	
+	
+	
+</mapper>
+
+
+

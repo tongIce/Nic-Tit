@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.litt.nic.mapper.ArticleMapper" >
+  <resultMap id="BaseResultMap" type="article" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="thumb_media_id" property="thumbMediaId" jdbcType="VARCHAR" />
+    <result column="author" property="author" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content_source_url" property="contentSourceUrl" jdbcType="VARCHAR" />
+    <result column="digest" property="digest" jdbcType="VARCHAR" />
+    <result column="show_cover_pic" property="showCoverPic" jdbcType="INTEGER" />
+    <result column="picurl" property="picurl" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="article" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, thumb_media_id, author, title, content_source_url, digest, show_cover_pic, picurl
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from nic_article
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="findMaxId" resultType="java.lang.Integer" >
+    select max(id)
+    from nic_article
+</select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from nic_article
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="article" >
+    insert into nic_article (id, thumb_media_id, author, 
+      title, content_source_url, digest, 
+      show_cover_pic, picurl, content
+      )
+    values (#{id,jdbcType=INTEGER}, #{thumbMediaId,jdbcType=VARCHAR}, #{author,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{contentSourceUrl,jdbcType=VARCHAR}, #{digest,jdbcType=VARCHAR}, 
+      #{showCoverPic,jdbcType=INTEGER}, #{picurl,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="article" >
+    insert into nic_article
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="thumbMediaId != null" >
+        thumb_media_id,
+      </if>
+      <if test="author != null" >
+        author,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="contentSourceUrl != null" >
+        content_source_url,
+      </if>
+      <if test="digest != null" >
+        digest,
+      </if>
+      <if test="showCoverPic != null" >
+        show_cover_pic,
+      </if>
+      <if test="picurl != null" >
+        picurl,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="thumbMediaId != null" >
+        #{thumbMediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="contentSourceUrl != null" >
+        #{contentSourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="digest != null" >
+        #{digest,jdbcType=VARCHAR},
+      </if>
+      <if test="showCoverPic != null" >
+        #{showCoverPic,jdbcType=INTEGER},
+      </if>
+      <if test="picurl != null" >
+        #{picurl,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="article" >
+    update nic_article
+    <set >
+      <if test="thumbMediaId != null" >
+        thumb_media_id = #{thumbMediaId,jdbcType=VARCHAR},
+      </if>
+      <if test="author != null" >
+        author = #{author,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="contentSourceUrl != null" >
+        content_source_url = #{contentSourceUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="digest != null" >
+        digest = #{digest,jdbcType=VARCHAR},
+      </if>
+      <if test="showCoverPic != null" >
+        show_cover_pic = #{showCoverPic,jdbcType=INTEGER},
+      </if>
+      <if test="picurl != null" >
+        picurl = #{picurl,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="article" >
+    update nic_article
+    set thumb_media_id = #{thumbMediaId,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      content_source_url = #{contentSourceUrl,jdbcType=VARCHAR},
+      digest = #{digest,jdbcType=VARCHAR},
+      show_cover_pic = #{showCoverPic,jdbcType=INTEGER},
+      picurl = #{picurl,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="article" >
+    update nic_article
+    set thumb_media_id = #{thumbMediaId,jdbcType=VARCHAR},
+      author = #{author,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      content_source_url = #{contentSourceUrl,jdbcType=VARCHAR},
+      digest = #{digest,jdbcType=VARCHAR},
+      show_cover_pic = #{showCoverPic,jdbcType=INTEGER},
+      picurl = #{picurl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.litt.nic.mapper.SuggestMapper" >
+  <resultMap id="BaseResultMap" type="suggest" >
+    <id column="suggest_id" property="suggestId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="suggest_title" property="suggestTitle" jdbcType="VARCHAR" />
+    <result column="suggest_content" property="suggestContent" jdbcType="VARCHAR" />
+    <result column="suggest_time" property="suggestTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+   <resultMap id="BaseMap" type="User" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_telephone" property="userTelephone" jdbcType="VARCHAR" />
+    <result column="user_department" property="userDepartment" jdbcType="VARCHAR" />
+    <result column="user_openid" property="userOpenid" jdbcType="VARCHAR" />
+  </resultMap> 
+  <sql id="Base_Column_List" >
+    suggest_id, user_id, suggest_title, suggest_content, suggest_time
+  </sql>
+  <!-- 通过list里面uid查找user  -->
+  <select id="findSuggestUser" resultMap="BaseMap" parameterType="java.util.List">
+  	select 
+  	user_id,user_name,user_telephone,user_department
+  	from nic_user 
+  	where 
+  	<if test="list.size()>0">
+  		user_id in 
+  		<foreach collection="list" item="item" open="(" separator="," close=")">
+  			#{item}
+  		</foreach>
+  	</if>
+  	<if test="list.size()== 0">
+  		1>2
+  	</if>
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from nic_suggest
+    where suggest_id = #{suggestId,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllSuggest" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from nic_suggest
+</select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from nic_suggest
+    where suggest_id = #{suggestId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="suggest" >
+    insert into nic_suggest (suggest_id, user_id, suggest_title, 
+      suggest_content, suggest_time)
+    values (#{suggestId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{suggestTitle,jdbcType=VARCHAR}, 
+      #{suggestContent,jdbcType=VARCHAR}, #{suggestTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="suggest" >
+    insert into nic_suggest
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="suggestId != null" >
+        suggest_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="suggestTitle != null" >
+        suggest_title,
+      </if>
+      <if test="suggestContent != null" >
+        suggest_content,
+      </if>
+      <if test="suggestTime != null" >
+        suggest_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="suggestId != null" >
+        #{suggestId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="suggestTitle != null" >
+        #{suggestTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestContent != null" >
+        #{suggestContent,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestTime != null" >
+        #{suggestTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="suggest" >
+    update nic_suggest
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="suggestTitle != null" >
+        suggest_title = #{suggestTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestContent != null" >
+        suggest_content = #{suggestContent,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestTime != null" >
+        suggest_time = #{suggestTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where suggest_id = #{suggestId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="suggest" >
+    update nic_suggest
+    set user_id = #{userId,jdbcType=INTEGER},
+      suggest_title = #{suggestTitle,jdbcType=VARCHAR},
+      suggest_content = #{suggestContent,jdbcType=VARCHAR},
+      suggest_time = #{suggestTime,jdbcType=TIMESTAMP}
+    where suggest_id = #{suggestId,jdbcType=INTEGER}
+  </update>
+</mapper>

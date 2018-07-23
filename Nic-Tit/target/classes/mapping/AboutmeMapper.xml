@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.litt.nic.mapper.AboutmeMapper" >
+  <resultMap id="BaseResultMap" type="aboutme" >
+    <id column="aboutme_id" property="aboutmeId" jdbcType="INTEGER" />
+    <result column="aboutme_introduce" property="aboutmeIntroduce" jdbcType="VARCHAR" />
+    <result column="aboutme_name" property="aboutmeName" jdbcType="VARCHAR" />
+    <result column="aboutme_telephone" property="aboutmeTelephone" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    aboutme_id, aboutme_introduce, aboutme_name, aboutme_telephone
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from nic_aboutme
+    where aboutme_id = #{aboutmeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from nic_aboutme
+    where aboutme_id = #{aboutmeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="aboutme" >
+    insert into nic_aboutme (aboutme_id, aboutme_introduce, aboutme_name, 
+      aboutme_telephone)
+    values (#{aboutmeId,jdbcType=INTEGER}, #{aboutmeIntroduce,jdbcType=VARCHAR}, #{aboutmeName,jdbcType=VARCHAR}, 
+      #{aboutmeTelephone,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="aboutme" >
+    insert into nic_aboutme
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="aboutmeId != null" >
+        aboutme_id,
+      </if>
+      <if test="aboutmeIntroduce != null" >
+        aboutme_introduce,
+      </if>
+      <if test="aboutmeName != null" >
+        aboutme_name,
+      </if>
+      <if test="aboutmeTelephone != null" >
+        aboutme_telephone,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="aboutmeId != null" >
+        #{aboutmeId,jdbcType=INTEGER},
+      </if>
+      <if test="aboutmeIntroduce != null" >
+        #{aboutmeIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="aboutmeName != null" >
+        #{aboutmeName,jdbcType=VARCHAR},
+      </if>
+      <if test="aboutmeTelephone != null" >
+        #{aboutmeTelephone,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="aboutme" >
+    update nic_aboutme
+    <set >
+      <if test="aboutmeIntroduce != null" >
+        aboutme_introduce = #{aboutmeIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="aboutmeName != null" >
+        aboutme_name = #{aboutmeName,jdbcType=VARCHAR},
+      </if>
+      <if test="aboutmeTelephone != null" >
+        aboutme_telephone = #{aboutmeTelephone,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where aboutme_id = #{aboutmeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="aboutme" >
+    update nic_aboutme
+    set aboutme_introduce = #{aboutmeIntroduce,jdbcType=VARCHAR},
+      aboutme_name = #{aboutmeName,jdbcType=VARCHAR},
+      aboutme_telephone = #{aboutmeTelephone,jdbcType=VARCHAR}
+    where aboutme_id = #{aboutmeId,jdbcType=INTEGER}
+  </update>
+</mapper>

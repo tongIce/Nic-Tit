@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.litt.micro.mapper.StudentMapper">
+	
+	<!-- 基础的studentResultmap -->
+	<resultMap type="student" id="stuResultMap">
+		<id column="stu_id" property="stuId"/>
+		<result column="stu_openId" property="stuOpenid"/>
+		<result column="stu_cardNumber" property="stuCardNumber"/>
+		<result column="stu_name" property="stuName"/>
+		<result column="stu_college" property="stuCollege"/>
+		<result column="stu_profession" property="stuProfession"/>
+		<result column="stu_grade" property="stuGrade"/>
+		<result column="stu_class" property="stuClass"/>
+		<result column="stu_sex" property="stuSex"/>
+		<result column="stu_born" property="stuBorn"/>
+		<result column="stu_IDnum" property="stuIDnum"/>
+		<result column="stu_phone" property="stuPhone"/>
+	</resultMap>
+	
+	<!-- 根据name和number查找出学生 -->
+	<select id="findStu"  resultMap="stuResultMap">
+		select 
+		micro_student.*
+		from micro_student
+		where stu_name = #{0} and stu_cardNumber = #{1}
+	</select>
+	<!-- 将获取到的openid和student表关联 -->
+	<update id="saveOpenId" >
+		update micro_student
+		set stu_openId = #{0} ,stu_phone = #{3}
+		where stu_name =#{1}  and stu_cardNumber = #{2}
+	</update>	
+	
+	
+</mapper>
+
+
+

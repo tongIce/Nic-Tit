@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.litt.nic.mapper.UserMapper" >
+	
+  <resultMap id="BaseResultMap" type="User" >
+    <id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_telephone" property="userTelephone" jdbcType="VARCHAR" />
+    <result column="user_department" property="userDepartment" jdbcType="VARCHAR" />
+    <result column="user_openid" property="userOpenid" jdbcType="VARCHAR" />
+    <result column="user_subscribe" property="userSubscribe" jdbcType="INTEGER" />
+    <result column="user_subscribeTime" property="userSubscribetime" jdbcType="TIMESTAMP" />
+    <result column="user_nickname" property="userNickname" jdbcType="VARCHAR" />
+    <result column="user_sex" property="userSex" jdbcType="INTEGER" />
+    <result column="user_country" property="userCountry" jdbcType="VARCHAR" />
+    <result column="user_province" property="userProvince" jdbcType="VARCHAR" />
+    <result column="user_city" property="userCity" jdbcType="VARCHAR" />
+    <result column="user_language" property="userLanguage" jdbcType="VARCHAR" />
+    <result column="user_headImgUrl" property="userHeadimgurl" jdbcType="VARCHAR" />
+  </resultMap> 
+  <!-- 配置通过查询用户，查询出用户共享级别resultmap -->
+  <resultMap type="user" id="selectForeignShare">
+  	
+  </resultMap>
+  <!-- 配置和共享级别一对一的resultmap -->
+  <resultMap type="User" id="findUserByDepart">
+  	<!-- 配置user信息 -->
+  	<id column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_telephone" property="userTelephone" jdbcType="VARCHAR" />
+    <result column="user_department" property="userDepartment" jdbcType="VARCHAR" />
+    <result column="user_openid" property="userOpenid" jdbcType="VARCHAR" />
+    <result column="user_subscribe" property="userSubscribe" jdbcType="INTEGER" />
+    <result column="user_subscribeTime" property="userSubscribetime" jdbcType="TIMESTAMP" />
+    <result column="user_nickname" property="userNickname" jdbcType="VARCHAR" />
+    <result column="user_sex" property="userSex" jdbcType="INTEGER" />
+    <result column="user_country" property="userCountry" jdbcType="VARCHAR" />
+    <result column="user_province" property="userProvince" jdbcType="VARCHAR" />
+    <result column="user_city" property="userCity" jdbcType="VARCHAR" />
+    <result column="user_language" property="userLanguage" jdbcType="VARCHAR" />
+    <result column="user_headImgUrl" property="userHeadimgurl" jdbcType="VARCHAR" />
+  		<!-- 一个用户一个共享级别 -->
+  		<association property="shareType" javaType="com.litt.nic.entity.ShareType">
+  			<id property="shid" column="shid"/>
+  			<result property="shareType" column="shareType"/>
+  		</association>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, user_name, user_telephone, user_department, user_openid, user_subscribe, 
+    user_subscribeTime, user_nickname, user_sex, user_country, user_province, user_city, 
+    user_language, user_headImgUrl
+  </sql>
+  
+  <!-- 查询用户同时一对一查询出对应得共享级别 -->
+  <select id="findUsersByDepart"  resultMap="findUserByDepart">
+  		select 
+  		user.user_id,
+  		user.user_name,
+  		user.user_department,
+  		user.user_openid,
+  		share.shid,
+  		share.shareType
+  		from nic_user user
+  		left join 
+  		nic_share share
+  		on user.user_shareType = share.shid 
+  		where 
+  		user.user_department = #{0}
+  		and share.shid = #{1}
+  </select>
+  <!-- 根据stid查询ShareType -->
+  <select id="findShareType" parameterType="Integer" resultType="ShareType">
+  	select 
+  	shid,shareType
+  	from nic_share
+  	where 
+  	shid = #{ stid}
+  </select>
+  <!-- 查找出共享级别为全校共享用户 -->
+  <select id="findUsersByShareType" resultMap="findUserByDepart" parameterType="java.lang.Integer">
+		 select 
+		 nic_user.*,
+		 nic_share.shid,nic_share.shareType
+		 from nic_user ,nic_share
+		 where nic_user.user_shareType = #{type}
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from nic_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByOpenid" resultMap="findUserByDepart" >
+    select 
+    <include refid="Base_Column_List" />
+    ,share.shid,share.shareType
+    from nic_user user
+    left join
+    nic_share share 
+    on user.user_shareType = share.shid
+    where user_openid = #{0}
+  </select>
+  <!-- 查询出所有的微信用户 -->
+  <select id="findAllUsers"  resultMap="findUserByDepart">
+  		select 
+  		user_id, user_name, user_telephone, user_department,
+  		share.shid,
+  		share.shareType
+  		from 
+  		nic_user user
+  		left join 
+  		nic_share share
+  		on user.user_shareType = share.shid
+  		order by user_id 
+  </select>
+  <!-- 通过id，查找出微信用户 -->
+  	<select id="findUserById" parameterType="INTEGER" resultMap="BaseResultMap">
+  		select
+  		user_id ,user_name,user_shareType
+  		from nic_user
+  		where user_id = #{userId}
+  	</select>
+  	
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from nic_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="user" >
+    insert into nic_user (user_id, user_name, user_telephone, 
+      user_department, user_openid, user_subscribe, 
+      user_subscribeTime, user_nickname, user_sex, 
+      user_country, user_province, user_city, 
+      user_language, user_headImgUrl)
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userTelephone,jdbcType=VARCHAR}, 
+      #{userDepartment,jdbcType=VARCHAR}, #{userOpenid,jdbcType=VARCHAR}, #{userSubscribe,jdbcType=INTEGER}, 
+      #{userSubscribetime,jdbcType=TIMESTAMP}, #{userNickname,jdbcType=VARCHAR}, #{userSex,jdbcType=INTEGER}, 
+      #{userCountry,jdbcType=VARCHAR}, #{userProvince,jdbcType=VARCHAR}, #{userCity,jdbcType=VARCHAR}, 
+      #{userLanguage,jdbcType=VARCHAR}, #{userHeadimgurl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="user" >
+    insert into nic_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="userTelephone != null" >
+        user_telephone,
+      </if>
+      <if test="userDepartment != null" >
+        user_department,
+      </if>
+      <if test="userOpenid != null" >
+        user_openid,
+      </if>
+      <if test="userSubscribe != null" >
+        user_subscribe,
+      </if>
+      <if test="userSubscribetime != null" >
+        user_subscribeTime,
+      </if>
+      <if test="userNickname != null" >
+        user_nickname,
+      </if>
+      <if test="userSex != null" >
+        user_sex,
+      </if>
+      <if test="userCountry != null" >
+        user_country,
+      </if>
+      <if test="userProvince != null" >
+        user_province,
+      </if>
+      <if test="userCity != null" >
+        user_city,
+      </if>
+      <if test="userLanguage != null" >
+        user_language,
+      </if>
+      <if test="userHeadimgurl != null" >
+        user_headImgUrl,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userTelephone != null" >
+        #{userTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="userDepartment != null" >
+        #{userDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="userOpenid != null" >
+        #{userOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="userSubscribe != null" >
+        #{userSubscribe,jdbcType=INTEGER},
+      </if>
+      <if test="userSubscribetime != null" >
+        #{userSubscribetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userNickname != null" >
+        #{userNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null" >
+        #{userSex,jdbcType=INTEGER},
+      </if>
+      <if test="userCountry != null" >
+        #{userCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="userProvince != null" >
+        #{userProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="userCity != null" >
+        #{userCity,jdbcType=VARCHAR},
+      </if>
+      <if test="userLanguage != null" >
+        #{userLanguage,jdbcType=VARCHAR},
+      </if>
+      <if test="userHeadimgurl != null" >
+        #{userHeadimgurl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateUser" parameterType="user" >
+    update nic_user
+    <set >
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userTelephone != null" >
+        user_telephone = #{userTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="userDepartment != null" >
+        user_department = #{userDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="userOpenid != null" >
+        user_openid = #{userOpenid,jdbcType=VARCHAR},
+      </if>
+      <if test="userSubscribe != null" >
+        user_subscribe = #{userSubscribe,jdbcType=INTEGER},
+      </if>
+      <if test="userSubscribetime != null" >
+        user_subscribeTime = #{userSubscribetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userNickname != null" >
+        user_nickname = #{userNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null" >
+        user_sex = #{userSex,jdbcType=INTEGER},
+      </if>
+      <if test="userCountry != null" >
+        user_country = #{userCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="userProvince != null" >
+        user_province = #{userProvince,jdbcType=VARCHAR},
+      </if>
+      <if test="userCity != null" >
+        user_city = #{userCity,jdbcType=VARCHAR},
+      </if>
+      <if test="userLanguage != null" >
+        user_language = #{userLanguage,jdbcType=VARCHAR},
+      </if>
+      <if test="userHeadimgurl != null" >
+        user_headImgUrl = #{userHeadimgurl,jdbcType=VARCHAR},
+      </if>
+      <!-- 原理，操作更加灵活，shareType为一个对象 -->
+       <if test="shareType != null">
+       	user_shareType = #{shareType.shid }
+       </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="user" >
+    update nic_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_telephone = #{userTelephone,jdbcType=VARCHAR},
+      user_department = #{userDepartment,jdbcType=VARCHAR},
+      user_openid = #{userOpenid,jdbcType=VARCHAR},
+      user_subscribe = #{userSubscribe,jdbcType=INTEGER},
+      user_subscribeTime = #{userSubscribetime,jdbcType=TIMESTAMP},
+      user_nickname = #{userNickname,jdbcType=VARCHAR},
+      user_sex = #{userSex,jdbcType=INTEGER},
+      user_country = #{userCountry,jdbcType=VARCHAR},
+      user_province = #{userProvince,jdbcType=VARCHAR},
+      user_city = #{userCity,jdbcType=VARCHAR},
+      user_language = #{userLanguage,jdbcType=VARCHAR},
+      user_headImgUrl = #{userHeadimgurl,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

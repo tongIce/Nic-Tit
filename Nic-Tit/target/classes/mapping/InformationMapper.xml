@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.litt.nic.mapper.InformationMapper" >
+  <resultMap id="BaseResultMap" type="information" >
+    <id column="information_id" property="informationId" jdbcType="INTEGER" />
+    <result column="information_title" property="informationTitle" jdbcType="VARCHAR" />
+    <result column="information_link" property="informationLink" jdbcType="VARCHAR" />
+    <result column="information_time" property="informationTime" jdbcType="TIMESTAMP" />
+    <result column="information_pic" property="informationPic" jdbcType="VARCHAR" />
+    <result column="information_description" property="informationDescription" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="information" extends="BaseResultMap" >
+    <result column="information_content" property="informationContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    information_id, information_title, information_link, information_time, information_pic, 
+    information_description
+  </sql>
+  <sql id="Blob_Column_List" >
+    information_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from nic_information
+    where information_id = #{informationId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from nic_information
+    where information_id = #{informationId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="information" >
+    insert into nic_information (information_id, information_title, 
+      information_link, information_time, information_pic, 
+      information_description, information_content
+      )
+    values (#{informationId,jdbcType=INTEGER}, #{informationTitle,jdbcType=VARCHAR}, 
+      #{informationLink,jdbcType=VARCHAR}, #{informationTime,jdbcType=TIMESTAMP}, #{informationPic,jdbcType=VARCHAR}, 
+      #{informationDescription,jdbcType=VARCHAR}, #{informationContent,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="information" >
+    insert into nic_information
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="informationId != null" >
+        information_id,
+      </if>
+      <if test="informationTitle != null" >
+        information_title,
+      </if>
+      <if test="informationLink != null" >
+        information_link,
+      </if>
+      <if test="informationTime != null" >
+        information_time,
+      </if>
+      <if test="informationPic != null" >
+        information_pic,
+      </if>
+      <if test="informationDescription != null" >
+        information_description,
+      </if>
+      <if test="informationContent != null" >
+        information_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="informationId != null" >
+        #{informationId,jdbcType=INTEGER},
+      </if>
+      <if test="informationTitle != null" >
+        #{informationTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="informationLink != null" >
+        #{informationLink,jdbcType=VARCHAR},
+      </if>
+      <if test="informationTime != null" >
+        #{informationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="informationPic != null" >
+        #{informationPic,jdbcType=VARCHAR},
+      </if>
+      <if test="informationDescription != null" >
+        #{informationDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="informationContent != null" >
+        #{informationContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="information" >
+    update nic_information
+    <set >
+      <if test="informationTitle != null" >
+        information_title = #{informationTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="informationLink != null" >
+        information_link = #{informationLink,jdbcType=VARCHAR},
+      </if>
+      <if test="informationTime != null" >
+        information_time = #{informationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="informationPic != null" >
+        information_pic = #{informationPic,jdbcType=VARCHAR},
+      </if>
+      <if test="informationDescription != null" >
+        information_description = #{informationDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="informationContent != null" >
+        information_content = #{informationContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where information_id = #{informationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="information" >
+    update nic_information
+    set information_title = #{informationTitle,jdbcType=VARCHAR},
+      information_link = #{informationLink,jdbcType=VARCHAR},
+      information_time = #{informationTime,jdbcType=TIMESTAMP},
+      information_pic = #{informationPic,jdbcType=VARCHAR},
+      information_description = #{informationDescription,jdbcType=VARCHAR},
+      information_content = #{informationContent,jdbcType=LONGVARCHAR}
+    where information_id = #{informationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="information" >
+    update nic_information
+    set information_title = #{informationTitle,jdbcType=VARCHAR},
+      information_link = #{informationLink,jdbcType=VARCHAR},
+      information_time = #{informationTime,jdbcType=TIMESTAMP},
+      information_pic = #{informationPic,jdbcType=VARCHAR},
+      information_description = #{informationDescription,jdbcType=VARCHAR}
+    where information_id = #{informationId,jdbcType=INTEGER}
+  </update>
+</mapper>

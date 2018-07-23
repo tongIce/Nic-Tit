@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.litt.nic.mapper.TechsupportMapper" >
+  <resultMap id="BaseResultMap" type="techsupport" >
+    <id column="techsupport_id" property="techsupportId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="techsupport_department" property="techsupportDepartment" jdbcType="VARCHAR" />
+    <result column="techsupport_devicename" property="techsupportDevicename" jdbcType="VARCHAR" />
+    <result column="techsupport_location" property="techsupportLocation" jdbcType="VARCHAR" />
+    <result column="techsupport_describe" property="techsupportDescribe" jdbcType="VARCHAR" />
+    <result column="techsupport_picture" property="techsupportPicture" jdbcType="VARCHAR" />
+    <result column="techsupport_feedback" property="techsupportFeedback" jdbcType="VARCHAR" />
+    <result column="techsupport_uptime" property="techsupportUptime" jdbcType="TIMESTAMP" />
+    <result column="techsupport_endtime" property="techsupportEndtime" jdbcType="TIMESTAMP" />
+    <result column="status_id" property="statusId" jdbcType="INTEGER" />
+    <result column="manager_id" property="managerId" jdbcType="INTEGER" />
+     <result column="type" property="type" jdbcType="VARCHAR" />
+    
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    techsupport_id, user_id, techsupport_department, techsupport_devicename, techsupport_location, 
+    techsupport_describe, techsupport_picture, techsupport_feedback, techsupport_uptime, 
+    techsupport_endtime, status_id, manager_id, type
+  </sql>
+  
+  <!-- 查询分享用户们的所有业务 -->
+  <select id="findShareSupport" resultMap="BaseResultMap" parameterType="java.util.List">
+        <if test="list.size()>0">
+        select 
+  		nic_techsupport.*
+  		from nic_techsupport
+        where 
+        user_id  in 
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")" >  
+            #{item}  
+        </foreach>
+        </if>
+        <if test="list.size()== 0">
+        	select 
+  		nic_techsupport.*
+  		from nic_techsupport
+        where  1>2
+        </if>
+  </select>
+  <select id="selectByTypeId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+  select * from nic_techsupport where type=#{0}
+  </select> 
+	
+
+  <select id="selectAllTS" resultMap="BaseResultMap">
+    select * from nic_techsupport
+  </select>
+  <select id="selectByType" resultMap="BaseResultMap" parameterType="java.lang.String">
+  select * from nic_techsupport where type=#{0}
+  </select>
+   <select id="findAllUnfinished" resultMap="BaseResultMap">
+    select * from nic_techsupport 
+    where status_id!=5
+  </select>
+  <select id="selectTSMultiInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
+  select * from nic_techsupport  
+  <where>
+     <if test="key=='department'">
+     techsupport_department like CONCAT('%',#{val},'%')
+     </if>
+     <if test="key=='address'">
+     techsupport_location like CONCAT('%',#{val},'%')
+     </if>
+     <if test="key=='uptime'">
+      techsupport_uptime like CONCAT('%',#{val},'%')
+     </if>
+     <if test="key=='endtime'">
+      techsupport_endtime like CONCAT('%',#{val},'%')
+     </if>
+    and status_id!=5
+     </where>
+     </select>
+      <select id="selectfinish" resultMap="BaseResultMap" parameterType="java.lang.String">
+  select * from nic_techsupport  
+  <where>
+      techsupport_endtime like CONCAT('%',#{val},'%') and status_id=5
+     </where>
+     </select>
+      <select id="selectUnFinishedTSByMultiInfo" resultMap="BaseResultMap" parameterType="java.lang.String">
+  select * from nic_techsupport  
+  <where>
+     <if test="key=='部门'">
+     techsupport_department like CONCAT('%',#{val},'%') and status_id!=5
+     </if>
+     <if test="key=='地点'">
+     techsupport_location like CONCAT('%',#{val},'%') and status_id!=5
+     </if>
+      <if test="key=='提交时间'">
+      techsupport_uptime like CONCAT('%',#{val},'%') and status_id!=5
+     </if>
+     and status_id!=5
+     </where>
+     </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from nic_techsupport
+    where techsupport_id = #{techsupportId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="findFeedback" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+   select *
+    from nic_techsupport
+    where user_id = #{userId} and date(techsupport_endtime) >= date_sub(CURDATE(), INTERVAL 7 DAY)
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from nic_techsupport
+    where techsupport_id = #{techsupportId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="techsupport" >
+    insert into nic_techsupport (techsupport_id, user_id, techsupport_department, 
+      techsupport_devicename, techsupport_location, 
+      techsupport_describe, techsupport_picture, 
+      techsupport_feedback, techsupport_uptime, 
+      techsupport_endtime, status_id, manager_id, 
+      type)
+    values (#{techsupportId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{techsupportDepartment,jdbcType=VARCHAR}, 
+      #{techsupportDevicename,jdbcType=VARCHAR}, #{techsupportLocation,jdbcType=VARCHAR}, 
+      #{techsupportDescribe,jdbcType=VARCHAR}, #{techsupportPicture,jdbcType=VARCHAR}, 
+      #{techsupportFeedback,jdbcType=VARCHAR}, #{techsupportUptime,jdbcType=TIMESTAMP}, 
+      #{techsupportEndtime,jdbcType=TIMESTAMP}, #{statusId,jdbcType=INTEGER}, #{managerId,jdbcType=INTEGER}, 
+      #{type,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="techsupport" >
+    insert into nic_techsupport
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="techsupportId != null" >
+        techsupport_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="techsupportDepartment != null" >
+        techsupport_department,
+      </if>
+      <if test="techsupportDevicename != null" >
+        techsupport_devicename,
+      </if>
+      <if test="techsupportLocation != null" >
+        techsupport_location,
+      </if>
+      <if test="techsupportDescribe != null" >
+        techsupport_describe,
+      </if>
+      <if test="techsupportPicture != null" >
+        techsupport_picture,
+      </if>
+      <if test="techsupportFeedback != null" >
+        techsupport_feedback,
+      </if>
+      <if test="techsupportUptime != null" >
+        techsupport_uptime,
+      </if>
+      <if test="techsupportEndtime != null" >
+        techsupport_endtime,
+      </if>
+      <if test="statusId != null" >
+        status_id,
+      </if>
+      <if test="managerId != null" >
+        manager_id,
+      </if>
+      <if test="type!= null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="techsupportId != null" >
+        #{techsupportId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="techsupportDepartment != null" >
+        #{techsupportDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportDevicename != null" >
+        #{techsupportDevicename,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportLocation != null" >
+        #{techsupportLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportDescribe != null" >
+        #{techsupportDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportPicture != null" >
+        #{techsupportPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportFeedback != null" >
+        #{techsupportFeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportUptime != null" >
+        #{techsupportUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="techsupportEndtime != null" >
+        #{techsupportEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="statusId != null" >
+        #{statusId,jdbcType=INTEGER},
+      </if>
+      <if test="managerId != null" >
+        #{managerId,jdbcType=INTEGER},
+      </if>
+      <if test="type!= null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateSupport" parameterType="techsupport" >
+  		
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="techsupport" >
+    update nic_techsupport
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="techsupportDepartment != null" >
+        techsupport_department = #{techsupportDepartment,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportDevicename != null" >
+        techsupport_devicename = #{techsupportDevicename,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportLocation != null" >
+        techsupport_location = #{techsupportLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportDescribe != null" >
+        techsupport_describe = #{techsupportDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportPicture != null" >
+        techsupport_picture = #{techsupportPicture,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportFeedback != null" >
+        techsupport_feedback = #{techsupportFeedback,jdbcType=VARCHAR},
+      </if>
+      <if test="techsupportUptime != null" >
+        techsupport_uptime = #{techsupportUptime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="techsupportEndtime != null" >
+        techsupport_endtime = #{techsupportEndtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="statusId != null" >
+        status_id = #{statusId,jdbcType=INTEGER},
+      </if>
+      <if test="managerId != null" >
+        manager_id = #{managerId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type= #{type,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where techsupport_id = #{techsupportId,jdbcType=INTEGER}
+  </update>
+		
+  <update id="updateByPrimaryKey" parameterType="techsupport" >
+    update nic_techsupport
+    set user_id = #{userId,jdbcType=INTEGER},
+      techsupport_department = #{techsupportDepartment,jdbcType=VARCHAR},
+      techsupport_devicename = #{techsupportDevicename,jdbcType=VARCHAR},
+      techsupport_location = #{techsupportLocation,jdbcType=VARCHAR},
+      techsupport_describe = #{techsupportDescribe,jdbcType=VARCHAR},
+      techsupport_picture = #{techsupportPicture,jdbcType=VARCHAR},
+      techsupport_feedback = #{techsupportFeedback,jdbcType=VARCHAR},
+      techsupport_uptime = #{techsupportUptime,jdbcType=TIMESTAMP},
+      techsupport_endtime = #{techsupportEndtime,jdbcType=TIMESTAMP},
+      status_id = #{statusId,jdbcType=INTEGER},
+      manager_id = #{managerId,jdbcType=INTEGER},
+       type = #{type,jdbcType=VARCHAR} 
+    where techsupport_id = #{techsupportId,jdbcType=INTEGER}
+  </update>
+  <update id="updateStatus_id" parameterType="java.lang.Integer" >
+    update nic_techsupport
+    set status_id =#{1}
+    where techsupport_id = #{0} 
+  </update>
+  <update id="updateManager_id" parameterType="java.lang.Integer" >
+    update nic_techsupport
+    set manager_id =#{1}
+    where techsupport_id = #{0} 
+  </update>
+  <update id="updateEndTime"  >
+    update nic_techsupport
+    set techsupport_endtime =#{1}
+    where techsupport_id = #{0} 
+  </update>
+  <update id="updateFeedback"  >
+    update nic_techsupport
+    set techsupport_feedback =#{1}
+    where techsupport_id = #{0} 
+  </update>
+</mapper>
