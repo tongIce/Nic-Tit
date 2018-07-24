@@ -10,6 +10,6 @@
 
 域名：wechat.v2.traceint.com
 sch_id: 133
-        appkey：tygyxysdhfj3343##$$
+        
 http://wechat.v2.traceint.com/index.php/schoolpush/registerLogin?
 sch_id=133&stud_no=172211237&stud_name=陈斌&sign=tygyxysdhfj3343##$$
