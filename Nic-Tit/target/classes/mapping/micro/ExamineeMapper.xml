@@ -53,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select 
 		micro_student.*
 		from micro_student
-		where stu_openId = #{openid}
+		where stu_openId = #{0}
 	</select>
 	<!-- 根据名族代码查询，名族名字 -->
 	<select id="findNation" parameterType="String" resultType="String">

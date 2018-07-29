@@ -67,7 +67,7 @@ public class StudentController {
 	/**
 	 * 获取用户的基本信息openId
 	 * @param code
-	 * @return
+	 * @return 
 	 */
 	@RequestMapping("information")
 	public String getUserInfo(HttpServletRequest request,String code){

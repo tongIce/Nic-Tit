@@ -27,6 +27,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from micro_student
 		where stu_name = #{0} and stu_cardNumber = #{1}
 	</select>
+	
+	
+	
+	<select id="findStudentByOpenid" parameterType="String" resultMap="stuResultMap">
+		select 
+		micro_student.*
+		from micro_student
+		where stu_openId = #{0}
+	</select>
+	
+	
 	<!-- 将获取到的openid和student表关联 -->
 	<update id="saveOpenId" >
 		update micro_student

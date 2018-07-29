@@ -12,7 +12,7 @@
 		</style>
 		<script language='javascript'>
 		 document.location = 'https://weixiao.qq.com/apps/identity/login-callback?state=${state}' 
-				</script> 
+		</script> 
 	</head>
 	<body>
 				<a href="http://weixiao.qq.com/apps/identity/login-callback?state=${state}">

@@ -14,6 +14,7 @@
 		document.location = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx1e611c20a19c682b&redirect_uri=http://xxzx.tit.edu.cn/Nic-Tit/student/information&response_type=code&scope=snsapi_base#wechat_redirect'
 			/* https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx1e611c20a19c682b&redirect_uri=http://xxzx.tit.edu.cn/Nic-Tit/student/sign&response_type=code&scope=snsapi_base#wechat_redirect
 			 */	 
+			
        </script> 
 	</head>
 	<body>

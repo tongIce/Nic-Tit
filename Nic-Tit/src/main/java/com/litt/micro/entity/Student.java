@@ -89,6 +89,13 @@ public class Student {
 	public void setStuPhone(String stuPhone) {
 		this.stuPhone = stuPhone;
 	}
+	@Override
+	public String toString() {
+		return "Student [stuId=" + stuId + ", stuOpenid=" + stuOpenid + ", stuCardNumber=" + stuCardNumber
+				+ ", stuName=" + stuName + ", stuCollege=" + stuCollege + ", stuProfession=" + stuProfession
+				+ ", stuGrade=" + stuGrade + ", stuClass=" + stuClass + ", stuSex=" + stuSex + ", stuBorn=" + stuBorn
+				+ ", stuIDnum=" + stuIDnum + ", stuPhone=" + stuPhone + "]";
+	}
 	
 	
 	

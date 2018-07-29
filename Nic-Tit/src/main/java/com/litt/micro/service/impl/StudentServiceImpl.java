@@ -25,5 +25,11 @@ public class StudentServiceImpl implements IStudentService {
 	public void saveOpenId(String openid, String name, String number, String telephone) {
 		studentMapper.saveOpenId(openid,name,number,telephone);
 	}
+	
+	public Student findStudentByOpenid(String openid) {
+		System.out.println(openid+"fjwoejfwaoief");
+	   Student stu=studentMapper.findStudentByOpenid(openid);
+	   return stu;
+	}
 
 }
