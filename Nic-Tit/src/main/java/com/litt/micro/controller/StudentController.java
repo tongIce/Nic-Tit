@@ -43,11 +43,11 @@ public class StudentController {
 	private IStudentService studentServiceImpl;
 	
 	/**
-	 * 进行签名验证，确保是微校数据，验证成功则跳转到登录，
-	 * 失败跳转到失败页面
+	 * 
 	 * @param state
 	 * @param app_key
-	 * @param timestamp
+	 * @pa
+	 * ram timestamp
 	 * @param nonce_str
 	 * @param sign
 	 */
@@ -64,6 +64,8 @@ public class StudentController {
 				return "/jsp/error/error";
 			}
 		}
+	
+	
 	/**
 	 * 获取用户的基本信息openId
 	 * @param code
@@ -76,6 +78,7 @@ public class StudentController {
 		request.getSession().setAttribute("code", code);
 		return "/jsp/student/stu_identify";
 	}
+	
 	
 	/**
 	 * 用户信息进行验证，同时将微信用户的openid和student表进行关联

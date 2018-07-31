@@ -27,9 +27,17 @@ public class StudentServiceImpl implements IStudentService {
 	}
 	
 	public Student findStudentByOpenid(String openid) {
-		System.out.println(openid+"fjwoejfwaoief");
+	   System.out.println("openid="+openid);
 	   Student stu=studentMapper.findStudentByOpenid(openid);
 	   return stu;
 	}
+	@Override
+	public Student finStudentByCard_number(String card_number) {
+		// TODO Auto-generated method stub
+		System.out.println("card_number="+card_number);
+		Student stu=studentMapper.finStudentByCard_number(card_number);
+		return stu;
+	}
+	
 
 }
