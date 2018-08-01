@@ -46,6 +46,7 @@ public class StudentController {
 	 * 进行签名验证，确保是微校数据，验证成功则跳转到登录，
 	 * 失败跳转到失败页面
 	 * @param state
+	 * @param card_number
 	 * @param app_key
 	 * @param timestamp
 	 * @param nonce_str
@@ -54,7 +55,6 @@ public class StudentController {
 	@RequestMapping("/sign")
 	public String  load(HttpServletRequest request,HttpServletResponse response, String state ,String app_key ,
 			String timestamp,String nonce_str,String sign,String code ){
-			
 			System.out.println(state+"这是state代码，是不是会变的");
 			if (SignUtil.checkSignature(state,app_key, timestamp, nonce_str,sign)) {
 				//跳转到登录页面,将state放心request提供给下个方法
@@ -118,7 +118,7 @@ public class StudentController {
 		MicroStu mstu = new MicroStu();
 		//填充微校必须的字段(学号，姓名，年级，学院/部门，专业，手机号和身份证不能同时为空)
 		mstu.setState(state);
-		mstu.setCard_number(stu.getStuCardNumber());//学号
+		mstu.setCard_number(stu.getStuCardNumber());//学号	
 		mstu.setName(stu.getStuName());//姓名
 		mstu.setCollege(stu.getStuCollege());//学院/部门
 		mstu.setProfession(stu.getStuProfession());//专业

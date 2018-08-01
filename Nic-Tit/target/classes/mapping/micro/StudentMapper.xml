@@ -20,6 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="stu_phone" property="stuPhone"/>
 	</resultMap>
 	
+	
 	<!-- 根据name和number查找出学生 -->
 	<select id="findStu"  resultMap="stuResultMap">
 		select 

@@ -31,9 +31,11 @@ public class LibraryController {
 			return "/jsp/student/stu_identify";
 		}*/
 		
+		String app_key=StudentController.app_key;
+		
 		//获取到用户信息并对其信息进行加密	
 		/* String key="133"+stu.getStuName()+stu.getStuCardNumber()+"tygyxysdhfj3343##$$";*/
-		 String sign=MD5.checkSignature("133",stu.getStuName(),stu.getStuCardNumber());
+		 String sign=MD5.checkSignature("133",stu.getStuName(),stu.getStuCardNumber(),app_key);
 
 		 System.out.println("sign=============================="+sign);
 		 request.getSession().setAttribute("sch_id", 133);
