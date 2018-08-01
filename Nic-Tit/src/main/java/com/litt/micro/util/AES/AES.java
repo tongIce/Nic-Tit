@@ -32,6 +32,14 @@ public class AES {
 	        return byte2hex(encrypted).toLowerCase();
 	    }
 
+	 /**
+	  * 
+	  * @param sSrc   需要解密的字符串
+	  * @param sKey   appkey
+	  * @param sIv    app_secret 取前16位;
+	  * @return
+	  * @throws Exception
+	  */
 	    public static String Decrypt(String sSrc, String sKey, String sIv) throws Exception {
 
 	        byte[] encrypted1      = hex2byte(sSrc);

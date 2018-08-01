@@ -10,4 +10,6 @@ public interface IStudentService {
 	void saveOpenId(String openid, String name, String number, String telephone);
 	//通过openId查找学生信息
 	Student findStudentByOpenid(String openid);
+	//通过学号查找学生信息
+	Student finStudentByCard_number(String card_number);
 }
