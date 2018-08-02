@@ -2,6 +2,7 @@ package com.litt.micro.entity;
 
 
 public class Score {
+	private int scid;
 	private String XN;  //学年
 	private String XQ;	//学期
 	private String logid; //个人id
@@ -21,6 +22,12 @@ public class Score {
 	private Double zxs;
 	private String hjlb;
 	private String bylw;
+	public int getScid() {
+		return scid;
+	}
+	public void setScid(int scid) {
+		this.scid = scid;
+	}
 	public String getXN() {
 		return XN;
 	}
@@ -135,6 +142,14 @@ public class Score {
 	public void setBylw(String bylw) {
 		this.bylw = bylw;
 	}
+	@Override
+	public String toString() {
+		return "Score [scid=" + scid + ", XN=" + XN + ", XQ=" + XQ + ", logid=" + logid + ", KCMC=" + KCMC + ", KCDM="
+				+ KCDM + ", KCLB=" + KCLB + ", kscj=" + kscj + ", kscj_en=" + kscj_en + ", JD=" + JD + ", csz=" + csz
+				+ ", KCYWMC=" + KCYWMC + ", kcxf=" + kcxf + ", hdxf=" + hdxf + ", cxbkbz=" + cxbkbz + ", XFJD=" + XFJD
+				+ ", cj_num=" + cj_num + ", zxs=" + zxs + ", hjlb=" + hjlb + ", bylw=" + bylw + "]";
+	}
+
 	
 	
 	

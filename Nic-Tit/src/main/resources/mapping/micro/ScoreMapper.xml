@@ -5,6 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.litt.micro.mapper.ScoreMapper">
 	<!-- 基础的scoreResultmap -->
 	<resultMap type="Score" id="scoResultMap">
+	<id column="sc_id" property="scId"/>
 		<result column="XN" property="XN"/>
 		<result column="XQ" property="XQ"/>
 		<result column="logid" property="logid"/>
@@ -28,11 +29,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 		<!-- 根据card_number查找出学生所有Score-->
-		<select id="findScore"  parameterType="String"  resultMap="scoResultMap">
+		<select id="findScore"   resultMap="scoResultMap">
 			select 
 			nic_score.*
 			from nic_score
-			where logid = #{0}
-		</select>
-
+			where logid = #{0} and XQ=#{1} and KCDM=#{2}
+		</select>	
 </mapper>

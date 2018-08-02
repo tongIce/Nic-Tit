@@ -33,15 +33,26 @@ public class ScoreController {
 	
 	
 	
-	@RequestMapping("information")
-	public String getUserInfo(HttpServletRequest request,String card_number){
-		System.out.println("111");
-		System.out.println(card_number);
-		Score []sc=scoreserverimpl.findScore(card_number);
+	@RequestMapping("getScoreInfo")
+	public String getScoreInfo(HttpServletRequest request,String card_number,String XQ,String KCDM){
+		System.out.println(card_number+" "+XQ+" "+KCDM);
+		Score sc=scoreserverimpl.findScore(card_number,XQ,KCDM);
 
-		System.out.println(sc);
+		System.out.println(sc.getHjlb());
 		return "/jsp/error/null";
 	}
+	
+	
+	//测试写的其他可以使用
+	@RequestMapping("test")
+	public String test(HttpServletRequest request,String name, String number){
+		
+		Student stu=studentServiceImpl.findStu(name, number);
+		System.out.println(stu);
+		return "/jsp/error/null";
+		
+	}
+	
 	
 	/**
 	 * 进行签名验证，确保是微校数据，验证成功则跳转到登录，
