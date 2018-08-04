@@ -19,8 +19,4 @@ public interface IExamineeService {
 	//数据库查询报考类型
 	String findExamType(int parse);
 	
-	
-	
-	
-	
 }

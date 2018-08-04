@@ -4,9 +4,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>课表查询</title>
 </head>
 <body>
-
+       <form  action="/register" method="post">
+    用户名<input type="text" name="username" />
+    <br/>
+    密码<input type="password" name="password"/>
+    <br/>
+    性别:  男<input type="radio" checked="checked" name="sex" value="M"/>
+    女<input type="radio" name="sex"  value="F" /><br>
+    <input type="submit" name="注册" value="注册">
+</form>
 </body>
 </html>

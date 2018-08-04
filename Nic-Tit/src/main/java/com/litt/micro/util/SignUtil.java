@@ -19,6 +19,7 @@ public class SignUtil {
 	 */
 	public static boolean checkSignature(String state, String app_key,
 			String timestamp,String nonce_str,String sign) {
+		sign=sign.replace(" ","");
 		String key = "C4960C80E48676D26FDB57AA684E9070";
 		String[] arr = new String[] {  "state="+state,"app_key="+app_key,"timestamp="+timestamp, "nonce_str="+nonce_str };
 		// 将四个属性参数进行字典序排序

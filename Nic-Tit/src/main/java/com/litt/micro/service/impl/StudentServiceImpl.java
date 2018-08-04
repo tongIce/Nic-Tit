@@ -16,6 +16,8 @@ public class StudentServiceImpl implements IStudentService {
 
 	@Autowired
 	private StudentMapper studentMapper;
+	
+	
 	//根据name和学号查找出student
 	public Student findStu(String name, String number) {
 		Student stu = studentMapper.findStu(name,number);
@@ -31,13 +33,7 @@ public class StudentServiceImpl implements IStudentService {
 	   Student stu=studentMapper.findStudentByOpenid(openid);
 	   return stu;
 	}
-	@Override
-	public Student finStudentByCard_number(String card_number) {
-		// TODO Auto-generated method stub
-		System.out.println("card_number="+card_number);
-		Student stu=studentMapper.finStudentByCard_number(card_number);
-		return stu;
-	}
+	
 	
 
 }

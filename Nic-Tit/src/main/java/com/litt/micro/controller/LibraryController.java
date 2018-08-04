@@ -1,5 +1,8 @@
 package com.litt.micro.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,7 +23,7 @@ public class LibraryController {
 	private IStudentService studentServiceImpl;
 	
 	@RequestMapping("/ass")
-	public String inputMes(String openid,HttpServletRequest request)
+	public String inputMes(String openid,HttpServletRequest request) throws Exception
 	{
 		
 		System.out.println("openid="+openid);
@@ -33,13 +36,12 @@ public class LibraryController {
 		
 		//获取到用户信息并对其信息进行加密	
 		/* String key="133"+stu.getStuName()+stu.getStuCardNumber()+"tygyxysdhfj3343##$$";*/
-		 String sign=MD5.checkSignature("133",stu.getStuName(),stu.getStuCardNumber());
-
-		 System.out.println("sign=============================="+sign);
+		//String sign=MD5.checkSignature("133",stu.getStuName(),stu.getStuCardNumber());
+		String sign=MD5.MD5Password("你好","GBK");
 		 request.getSession().setAttribute("sch_id", 133);
 		 request.getSession().setAttribute("stud_no", stu.getStuCardNumber());
 		 request.getSession().setAttribute("stud_name", stu.getStuName());
-		 request.getSession().setAttribute("sign", sign);   
+		 //request.getSession().setAttribute("sign", sign);   
 		//往接口跳
 		return "/jsp/Library/Library";
 		
