@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.litt.micro.mapper.ScoreMapper">
+	<!-- 基础的scoreResultmap -->
+	<resultMap type="Score" id="scoResultMap">
+	<id column="sc_id" property="scId"/>
+		<result column="XN" property="XN"/>
+		<result column="XQ" property="XQ"/>
+		<result column="logid" property="logid"/>
+		<result column="KCMC" property="KCMC"/>
+		<result column="KCDM" property="KCDM"/>
+		<result column="KCLB" property="KCLB"/>
+		<result column="kscj" property="kscj"/>
+		<result column="kscj_en" property="kscj_en"/>
+		<result column="JD" property="JD"/>
+		<result column="csz" property="csz"/>
+		<result column="KCYWMC" property="KCYWMC"/>
+		<result column="kcxf" property="kcxf"/>
+		<result column="hdxf" property="hdxf"/>
+		<result column="cxbkbz" property="cxbkbz"/>
+		<result column="XFJD" property="XFJD"/>
+		<result column="cj_num" property="cj_num"/>
+		<result column="zxs" property="zxs"/>
+		<result column="hjlb" property="hjlb"/>
+		<result column="bylw" property="bylw"/>
+	</resultMap>
+	
+	
+		<!-- 根据card_number查找出学生所有Score-->
+		<select id="findScore"   resultMap="scoResultMap">
+			select 
+			nic_score.*
+			from nic_score
+			where logid = #{0} and XQ=#{1} and KCDM=#{2}
+		</select>	
+</mapper>

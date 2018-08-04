@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		
 	</resultMap>
 	
+	
 	<!-- 根据name和number查找出学生 -->
 	<select id="findStu"  resultMap="stuResultMap">
 		select 
