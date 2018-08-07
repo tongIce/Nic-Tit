@@ -2,57 +2,41 @@
 <!DOCTYPE mapper 
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.litt.micro.mapper.New_StudentMapper">
+<mapper namespace="com.litt.micro.mapper.CoursesScheduleMapper">
 	<!-- 基础的studentResultmap -->
-	<resultMap type="student" id="stuResultMap">
+	<resultMap type="CoursesSchedule" id="CoursesSchedule">
 		<id column="xh" property="xh"/>
 		<result column="ID" property="ID"/>
 		<result column="xn" property="xn"/>
 		<result column="xq" property="xq"/>
-		<result column="xh" property="xh"/>
 		<result column="KCDM" property="KCDM"/>
-		<result column="skbj" property="skbj"/>
+		<result column="SKBJ" property="SKBJ"/>
 		<result column="stimezc" property="stimezc"/>
-		<result column="dsz" property="dsz"/>
+		<result column="DSZ" property="DSZ"/>
 		<result column="xqj" property="xqj"/>
 		<result column="JCInfo" property="JCInfo"/>
 		<result column="room" property="room"/>
 		<result column="RKJSGH" property="RKJSGH"/>
 		<result column="KCLBIMC" property="KCLBlMC"/>
 		<result column="KHFS" property="KHFS"/>
-		<result column="xf" property="xf"/>
+		<result column="XF" property="XF"/>
 		<result column="jsxs" property="jsxs"/>
-		<result column="syxs" property="syxs"/>
-		<result column="sjxs" property="sjxs"/>
-		<result column="qtxs" property="qtxs"/>
+		<result column="SYXS" property="SYXS"/>
+		<result column="SJXS" property="SJXS"/>
+		<result column="QTXS" property="QTXS"/>
 		<result column="JSM_XQ" property="JSM_XQ"/>
+		<result column="lessname"   property="lessname"/>
+		<result column="jsxm" property="jsxm" />
 	</resultMap>
 	
-	<!-- 根据name和number查找出学生 -->
-	<select id="finStudentByCard_number"  resultMap="stuResultMap">
-		select   
-		*
-		from [jwjk].[dbo].[V_JW_XSKB]
-		where xh=#{0}
-	</select>
-	
-	
-	
-	<select id="findStudentByOpenid" parameterType="String" resultMap="stuResultMap">
-		select 
-		micro_student.*
-		from micro_student
-		where stu_openId = #{0}
-	</select>
-	
-	
-	<!-- 将获取到的openid和student表关联 -->
-	<update id="saveOpenId" >
-		update micro_student
-		set stu_openId = #{0} ,stu_phone = #{3}
-		where stu_name =#{1}  and stu_cardNumber = #{2}
-	</update>	
-	
+	<!-- 根据学生号查找出学生 -->
+	<select id="finStudentByCard_number" resultMap="CoursesSchedule">
+		select   distinct V_JW_XSKB.*   
+		from     V_JW_XSKB
+		where    xh=#{0} and xn=#{1}  and xq=#{2}
+		order by KCDM
+	</select>  
+	     
 	
 </mapper>
 

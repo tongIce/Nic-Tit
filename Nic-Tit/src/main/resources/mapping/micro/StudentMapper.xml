@@ -17,11 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="stu_sex" property="stuSex"/>
 		<result column="stu_born" property="stuBorn"/>
 		<result column="stu_IDnum" property="stuIDnum"/>
-		<result column="stu_phone" property="stuPhone"/>
-		
-		
-		
-		
+		<result column="stu_phone" property="stuPhone"/>		
 	</resultMap>
 	
 	

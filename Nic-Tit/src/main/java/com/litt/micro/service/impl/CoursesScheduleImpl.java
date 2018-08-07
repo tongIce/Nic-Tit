@@ -1,6 +1,10 @@
 package com.litt.micro.service.impl;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +22,10 @@ public class CoursesScheduleImpl implements ICoursesScheduleService{
 	private  CoursesScheduleMapper coursesschedulemapper;
 
 	
-	public CoursesSchedule finStudentByCard_number(String card_number) {
-		// TODO Auto-generated method stub
-		System.out.println("card_number="+card_number);
-		CoursesSchedule cs=finStudentByCard_number(card_number);
+	public ArrayList<CoursesSchedule> finStudentByCard_number(String xh,String xn,String xq) {
+	
+		ArrayList<CoursesSchedule> cs;
+		cs=coursesschedulemapper.finStudentByCard_number(xh,xn,xq);
 		return cs;
 	}
 

@@ -118,6 +118,8 @@ public class StudentController {
 		String openid = WeixinUtil.getOpenid(code);
 		studentServiceImpl.saveOpenId(openid,name,number,telephone);
 		
+		
+		
 		MicroStu mstu = new MicroStu();
 		//填充微校必须的字段(学号，姓名，年级，学院/部门，专业，手机号和身份证不能同时为空)
 		mstu.setState(state);
