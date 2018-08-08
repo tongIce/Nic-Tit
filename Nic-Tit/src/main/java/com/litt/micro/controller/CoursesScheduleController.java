@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.litt.wechat.Util.SignUtil;
@@ -28,7 +29,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.litt.micro.entity.CoursesSchedule;
+import com.litt.micro.entity.Result;
 import com.litt.micro.entity.Student;
+import com.litt.micro.entity.Yuangou;
 import com.litt.micro.mapper.CoursesScheduleMapper;
 import com.litt.micro.service.ICoursesScheduleService;
 import com.litt.micro.service.IStudentService;
@@ -36,6 +39,7 @@ import com.litt.micro.util.WeixinUtil;
 import com.litt.micro.util.AES.AES;
 import com.litt.micro.util.TermNumber.TermNumber;
 import com.litt.micro.util.Timetable.Timetable;
+import com.litt.micro.util.post.PostWithJson;
 import com.litt.micro.util.stu.Rdata;
 
 /**
@@ -51,6 +55,7 @@ public class CoursesScheduleController {
 
 	public static int count = 0;
 	public static ArrayList<CoursesSchedule> arrCourse = new ArrayList<CoursesSchedule>();
+	public static List list = new ArrayList();
 	public static List timetable = new ArrayList();
 	@Autowired
 	private ICoursesScheduleService CoursesScheduleImpl;
@@ -65,9 +70,31 @@ public class CoursesScheduleController {
 	 * @throws IOException
 	 */
 
-	@RequestMapping(value = "/load", method = RequestMethod.POST)
-	public String load(@RequestBody String param) throws IOException// 将JSON字符串中的两个变量的值分别赋予了两个字符串
-	{
+	@RequestMapping(value = "/load",method=RequestMethod.POST)
+	@ResponseBody
+	public Yuangou   load(@RequestBody String param) throws IOException// 将JSON字符串中的两个变量的值分别赋予了两个字符串
+	{			
+		/*Yuangou gou = new Yuangou();
+		gou.setName("袁通");
+		gou.setBar("汪汪汪");
+		
+		Yuangou  gou1 = new Yuangou();
+		gou1.setName("lin1");
+		gou1.setBar("sssss");
+		Yuangou  gou2 = new Yuangou();
+		gou2.setName("圆筒");
+		gou2.setBar("汪汪汪");
+		List<Yuangou> list  =new ArrayList<>();
+		list.add(gou1);
+		list.add(gou2);
+		
+		gou.setList(list);
+		
+		return gou;*/
+		
+		
+		
+		
 		// 接收微校发送的数据(因为以Post方式传过来，需要特定方式接收)
 		System.out.println(param);
 		JSONObject parse = JSONObject.parseObject(param);
@@ -85,14 +112,14 @@ public class CoursesScheduleController {
 		}
 		System.out.println("解密后的数据:" + DeString);
 
-		/*
-		 * JSONObject json = JSONObject.parseObject(DeString); String car_number
+		
+		/* * JSONObject json = JSONObject.parseObject(DeString); String car_number
 		 * =json.getString("card_number"); String app_key1
 		 * =json.getString("app_key"); String nonce_str
 		 * =json.getString("nonce_str"); Long str = (Long)
 		 * json.get("timestamp"); String timestamp = String.valueOf(str); String
-		 * sign =json.getString("sign");
-		 */
+		 * sign =json.getString("sign");*/
+		 
 
 		DeString = DeString.replace("{", "");
 		DeString = DeString.replace("}", "");
@@ -132,18 +159,23 @@ public class CoursesScheduleController {
 			xn = String.valueOf(year);
 			xq = "0";
 		}
-
+      
 		String xh = card_number;
+
 
 		// 查询并取出数据
 		arrCourse = CoursesScheduleImpl.finStudentByCard_number(xh, xn, xq);
-
+		
+		Yuangou yuangou=new Yuangou();
+		yuangou.setXh(card_number);
+		yuangou.setType("0");
+		yuangou.setSession(arrCourse.get(0).getXn() + TermNumber.TermNumberConvert(arrCourse.get(0).getXq()));
+		
+		
 		// 封装数据
-		Map<String, String> arrayMap = new HashMap<String, String>();
-		//Map<String, JSONObject> arrmap = new HashMap<String, JSONObject>();
+		/*Map<String, String> arrayMap = new HashMap<String, String>();
 		List<Map> arraylist=new ArrayList<Map>();
 		JSONObject obj= new JSONObject();
-		//JSONObject innerObj= new JSONObject();
 		obj.put("card_number", card_number);
 		obj.put("type", "0");
 		obj.put("session", arrCourse.get(0).getXn() + TermNumber.TermNumberConvert(arrCourse.get(0).getXq()));
@@ -164,11 +196,10 @@ public class CoursesScheduleController {
 						int high = Integer.valueOf(strr[1]);
 						System.out.println("low=" + low + "  high=" + high);
 		
-						/**
+						*//**
 						 * 封装每条记录(每一条重复封装好多次)
-						 */
+						 *//*
 						for (int x = low; x <= high; x++) {
-							
 							arrayMap.put("course_id", arrCourse.get(i).getKCDM());
 							arrayMap.put("course_class", arrCourse.get(i).getXqj().substring(2, 3));
 							arrayMap.put("begin_time", Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
@@ -180,29 +211,13 @@ public class CoursesScheduleController {
 							arrayMap.put("week", String.valueOf(x));
 							arrayMap.put("address", arrCourse.get(i).getRoom());
 							arrayMap.put("required_course", "-1");
-							/*if(count==1)
-							{	
-								//arraylist.add(arrayMap);
-								obj.put("timetable[", arrayMap);
-								timetable.add(obj);					
-							}
-							else
-							{
-								//arraylist.add(arrayMap);
-								obj.put(",", arrayMap);
-								timetable.add(obj);
-							}*/
-						    
-						    //obj= new JSONObject();
-							arraylist.add(count++,arrayMap);
+							arraylist.add(arrayMap);
 							arrayMap = new HashMap<String, String>();
-				        }
-						
+				        }		
 			  }
 
 			// 单周上课情况(如形式与政策stimezc='8'/stimezc='12')
 			else {
-					
 					arrayMap.put("course_id", arrCourse.get(i).getKCDM());
 					arrayMap.put("course_class", arrCourse.get(i).getXqj().substring(2, 3));
 					arrayMap.put("begin_time", Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
@@ -214,32 +229,14 @@ public class CoursesScheduleController {
 					arrayMap.put("week", String.valueOf(arrCourse.get(i).getStimezc()));
 					arrayMap.put("address", arrCourse.get(i).getRoom());
 					arrayMap.put("required_course", "-1");
-					/*if(count==1)
-					{
-						//arraylist.add(arrayMap);
-						obj.put("timetable[", arrayMap);
-						timetable.add(obj);
-					}
-					else
-					{
-						//arraylist.add(arrayMap);
-						obj.put(",", arrayMap);
-						timetable.add(obj);
-					}*/
-					//obj= new JSONObject();
-					arraylist.add(count++,arrayMap);
+					arraylist.add(arrayMap);
 					arrayMap = new HashMap<String, String>();
 			  }
 			
 
 		}
 		
-		/*System.out.println("arraylist的长度为:"+arraylist.size());
-		for(int y=0;y<arraylist.size();y++)
-		{
-
-			System.out.println(arraylist.get(y));
-		}*/
+		
 		obj.put("timetable", arraylist);
 		timetable.add(obj);
 		JSONArray jsonArray1 = JSONArray.fromObject(timetable);
@@ -251,20 +248,82 @@ public class CoursesScheduleController {
          for(int h=0;h<timetable.size();h++)
          {
         	 System.out.println("timetable:"+timetable.get(h));
-         }
+         }*/
 		
          
+
+
+				// 封装timetable
+				for (int i = 0; i < arrCourse.size(); i++) {
+					System.out.println("共取出:" + arrCourse.size() + "条数据");
+					String regex = "\\d{1,}-\\d{1,}";
+					Pattern pat = Pattern.compile(regex);
+					Matcher mat = pat.matcher(arrCourse.get(i).getStimezc());
+
+					// 如果匹配1-16周情况(型如stimezc='1-16')
+					if (mat.matches()) {
+								// stimezc按"-"进行分割
+								String stimezc = arrCourse.get(i).getStimezc();
+								String strr[] = stimezc.split("-");
+								int low = Integer.valueOf(strr[0]);
+								int high = Integer.valueOf(strr[1]);
+								System.out.println("low=" + low + "  high=" + high);
+				
+								/**
+								 * 封装每条记录(每一条重复封装好多次)
+								 */
+								for (int x = low; x <= high; x++) {
+									Result result=new Result();
+									result.setKCDM(arrCourse.get(i).getKCDM());
+									result.setXqj(arrCourse.get(i).getXqj().substring(2, 3));
+									result.setBegin_time(Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
+									result.setEnd_time(Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
+									result.setLessname(arrCourse.get(i).getLessname());
+									result.setJsxm(arrCourse.get(i).getJsxm());
+									result.setXqj(arrCourse.get(i).getXqj().substring(1, 2));
+									result.setSKBJ(arrCourse.get(i).getSKBJ());
+									result.setWeek(String.valueOf(x));
+									result.setRoom(arrCourse.get(i).getRoom());
+									result.setRequired_course("-1");
+									list.add(result);
+						        }		
+					  }
+
+					// 单周上课情况(如形式与政策stimezc='8'/stimezc='12')
+					else {
+						Result result=new Result();
+						result.setKCDM(arrCourse.get(i).getKCDM());
+						result.setXqj(arrCourse.get(i).getXqj().substring(2, 3));
+						result.setBegin_time(Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
+						result.setEnd_time(Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
+						result.setLessname(arrCourse.get(i).getLessname());
+						result.setJsxm(arrCourse.get(i).getJsxm());
+						result.setXqj(arrCourse.get(i).getXqj().substring(1, 2));
+						result.setSKBJ(arrCourse.get(i).getSKBJ());
+						result.setWeek(String.valueOf(arrCourse.get(i).getStimezc()));
+						result.setRoom(arrCourse.get(i).getRoom());
+					    result.setRequired_course("-1");
+						list.add(result);
+							
+					  }
+					
+				}
+				
+				yuangou.setList(list);
+		
+		
 		
 		
 		//加密
-         System.out.println("转换成字符串后为:"+timetable.toString());
+       /*  System.out.println("转换成字符串后为:"+timetable.toString());
          String cKey=StudentController.app_key;
          System.out.println("cKey="+cKey);
          String cIv=StudentController.app_secret.substring(0, 16);
          System.out.println("cIv="+cIv);
+         String  strEncryp = null;
 		 try {
 			 //加密后的字符串
-			String  strEncryp=AES.Encrypt(timetable.toString(), cKey, cIv);
+            strEncryp=AES.Encrypt(timetable.toString(), cKey, cIv);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -272,9 +331,25 @@ public class CoursesScheduleController {
 		 
 		 
 		//返回数据
-		
-		
-		
+		 
+		    ModelAndView mav = new ModelAndView("result");          
+		    Map<String, String> mapp = new HashMap<String, String>();
+		    map.put("code", "0");                                
+		    map.put("message", "success");    
+		    map.put("raw_data", strEncryp);
+		    map.put("app_key", cKey);
+		    mav.addObject("map", map);                              
+		    return mav;*/
+		    
+		    /*Rdata data =new Rdata();
+	        data.setApp_key(cKey);
+	        data.setRaw_data(strEncryp);
+	        data.setCode("0");
+	        data.setMessage("success");
+	        String para = JSONObject.toJSONString(data);
+	        System.out.println("para="+para);
+	        String jsonSMS = PostWithJson.JsonSMS("http://shi.tunnel.qydev.com/Nic-Tit/CoursesSchedule/load", para);
+	        System.out.println("这是返回的数据是"+jsonSMS);*/
 		/*
 		 * // 验证签名 if (com.litt.micro.util.SignUtil.checkSignature(car_number,
 		 * app_key1, timestamp, nonce_str, sign)) { System.out.println("签名正确");
@@ -287,8 +362,8 @@ public class CoursesScheduleController {
 		 * "/jsp/error/CoursesSchedule"; }
 		 */
 
-		return "";
-
+		return yuangou;
+		    
 	}
 
 }

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import org.apache.commons.httpclient.HttpClient;
 
 //数据格式为json发送post请求
 public class PostWithJson {
@@ -25,11 +26,15 @@ public class PostWithJson {
 	        out.write(postData);
 	        out.flush();
 	        out.close();
+	        
 	        //获取响应状态
-	        if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+	        
+	        /*if (conn.getResponseCode() != HttpURLConnection.HTTP_OK) {
 	            System.out.println("connect failed!");
 	            return "";
-	        }
+	        }*/
+	        
+	        
 	        //获取响应内容体
 	        String line, result = "";
 	        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
@@ -43,5 +48,6 @@ public class PostWithJson {
 	    }
 	    return "";
 	}
+   
    
 }

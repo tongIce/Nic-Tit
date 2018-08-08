@@ -1,8 +1,37 @@
 package com.litt.micro.entity;
 
+import java.util.List;
+
 //学生课表实体类
 public class CoursesSchedule {
-       
+    private String code;
+    private String message;
+    private String raw_data;
+    private String APP_KEY;
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	public String getRaw_data() {
+		return raw_data;
+	}
+	public void setRaw_data(String raw_data) {
+		this.raw_data = raw_data;
+	}
+	public String getAPP_KEY() {
+		return APP_KEY;
+	}
+	public void setAPP_KEY(String aPP_KEY) {
+		APP_KEY = aPP_KEY;
+	}
 	private String ID;
 	private String xn;//学年
 	private String xq;//学期
@@ -25,6 +54,55 @@ public class CoursesSchedule {
 	private String JSM_XQ;//本校区
 	private String lessname;//课程名
 	private String jsxm;//教师姓名
+	private String type;
+	private String begin_time;
+	private String end_time;
+	private String week;
+	private String required_course;
+	public String getRequired_course() {
+		return required_course;
+	}
+	public void setRequired_course(String required_course) {
+		this.required_course = required_course;
+	}
+	public String getWeek() {
+		return week;
+	}
+	public void setWeek(String week) {
+		this.week = week;
+	}
+	public String getBegin_time() {
+		return begin_time;
+	}
+	public void setBegin_time(String begin_time) {
+		this.begin_time = begin_time;
+	}
+	public String getEnd_time() {
+		return end_time;
+	}
+	public void setEnd_time(String end_time) {
+		this.end_time = end_time;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public String getSession() {
+		return session;
+	}
+	public void setSession(String session) {
+		this.session = session;
+	}
+	private String session;
+	private List<CoursesSchedule>  list ;
+	public List<CoursesSchedule> getList() {
+		return list;
+	}
+	public void setList(List<CoursesSchedule> list) {
+		this.list = list;
+	}
 	public String getID() {
 		return ID;
 	}

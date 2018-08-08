@@ -9,7 +9,7 @@ public class TermNumber {
 		{
 		case "0": return "02";
 		case "1":return "01";
-		default :return "0";
+		default :return "01";
 		
 		}
 		

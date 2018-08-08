@@ -6,8 +6,22 @@ public class Rdata {
 	
     private String raw_data;
 	private	String	app_key;
+	private String message;
+	private String code;
 	public String getRaw_data() {
 		return raw_data;
+	}
+	public String getMessage() {
+		return message;
+	}
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
 	}
 	public void setRaw_data(String raw_data) {
 		this.raw_data = raw_data;
