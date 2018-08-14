@@ -72,7 +72,7 @@ public class CoursesScheduleController {
 
 	@RequestMapping(value = "/load",method=RequestMethod.POST)
 	@ResponseBody
-	public Yuangou   load(@RequestBody String param) throws IOException// 将JSON字符串中的两个变量的值分别赋予了两个字符串
+	public ModelAndView   load(@RequestBody String param) throws IOException// 将JSON字符串中的两个变量的值分别赋予了两个字符串
 	{			
 		/*Yuangou gou = new Yuangou();
 		gou.setName("袁通");
@@ -315,7 +315,7 @@ public class CoursesScheduleController {
 		
 		
 		//加密
-       /*  System.out.println("转换成字符串后为:"+timetable.toString());
+         System.out.println("转换成字符串后为:"+yuangou.toString());
          String cKey=StudentController.app_key;
          System.out.println("cKey="+cKey);
          String cIv=StudentController.app_secret.substring(0, 16);
@@ -323,7 +323,7 @@ public class CoursesScheduleController {
          String  strEncryp = null;
 		 try {
 			 //加密后的字符串
-            strEncryp=AES.Encrypt(timetable.toString(), cKey, cIv);
+            strEncryp=AES.Encrypt(yuangou.toString(), cKey, cIv);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -339,7 +339,7 @@ public class CoursesScheduleController {
 		    map.put("raw_data", strEncryp);
 		    map.put("app_key", cKey);
 		    mav.addObject("map", map);                              
-		    return mav;*/
+		    return mav;
 		    
 		    /*Rdata data =new Rdata();
 	        data.setApp_key(cKey);
@@ -362,7 +362,7 @@ public class CoursesScheduleController {
 		 * "/jsp/error/CoursesSchedule"; }
 		 */
 
-		return yuangou;
+		//return yuangou;
 		    
 	}
 
