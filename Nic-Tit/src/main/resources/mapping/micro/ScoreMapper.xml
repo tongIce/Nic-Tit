@@ -29,10 +29,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	
 		<!-- 根据card_number查找出学生所有Score-->
-		<select id="findScore"   resultMap="scoResultMap">
-			select 
-			nic_score.*
-			from nic_score
-			where logid = #{0} and XQ=#{1} and KCDM=#{2}
+		<select id="findScore"   resultMap="scoResultMap" >
+			select VIEW_STUDSCORE.*
+			from VIEW_STUDSCORE 
+			where logid = #{0} 
+			order by XN  asc , XQ asc
 		</select>	
 </mapper>

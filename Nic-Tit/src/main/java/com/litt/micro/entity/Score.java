@@ -2,7 +2,7 @@ package com.litt.micro.entity;
 
 
 public class Score {
-	private int scid;
+	private String scid;
 	private String XN;  //学年
 	private String XQ;	//学期
 	private String logid; //个人id
@@ -11,21 +11,21 @@ public class Score {
 	private String KCLB;  //课程类型
 	private String kscj; //课上成绩
 	private String kscj_en;  //
-	private Double JD;  //绩点
-	private Integer csz;  //
+	private String JD;  //绩点
+	private String csz;  //
 	private String KCYWMC;  
-	private Double kcxf;  
-	private Double hdxf;
+	private String kcxf;  
+	private String hdxf;
 	private String cxbkbz; //初修  补考
-	private Double XFJD; //学分绩点
-	private Double cj_num;
-	private Double zxs;
+	private String XFJD; //学分绩点
+	private String cj_num;
+	private String zxs;
 	private String hjlb;
 	private String bylw;
-	public int getScid() {
+	public String getScid() {
 		return scid;
 	}
-	public void setScid(int scid) {
+	public void setScid(String scid) {
 		this.scid = scid;
 	}
 	public String getXN() {
@@ -76,16 +76,16 @@ public class Score {
 	public void setKscj_en(String kscj_en) {
 		this.kscj_en = kscj_en;
 	}
-	public Double getJD() {
+	public String getJD() {
 		return JD;
 	}
-	public void setJD(Double jD) {
+	public void setJD(String jD) {
 		JD = jD;
 	}
-	public Integer getCsz() {
+	public String getCsz() {
 		return csz;
 	}
-	public void setCsz(Integer csz) {
+	public void setCsz(String csz) {
 		this.csz = csz;
 	}
 	public String getKCYWMC() {
@@ -94,16 +94,16 @@ public class Score {
 	public void setKCYWMC(String kCYWMC) {
 		KCYWMC = kCYWMC;
 	}
-	public Double getKcxf() {
+	public String getKcxf() {
 		return kcxf;
 	}
-	public void setKcxf(Double kcxf) {
+	public void setKcxf(String kcxf) {
 		this.kcxf = kcxf;
 	}
-	public Double getHdxf() {
+	public String getHdxf() {
 		return hdxf;
 	}
-	public void setHdxf(Double hdxf) {
+	public void setHdxf(String hdxf) {
 		this.hdxf = hdxf;
 	}
 	public String getCxbkbz() {
@@ -112,22 +112,22 @@ public class Score {
 	public void setCxbkbz(String cxbkbz) {
 		this.cxbkbz = cxbkbz;
 	}
-	public Double getXFJD() {
+	public String getXFJD() {
 		return XFJD;
 	}
-	public void setXFJD(Double xFJD) {
+	public void setXFJD(String xFJD) {
 		XFJD = xFJD;
 	}
-	public Double getCj_num() {
+	public String getCj_num() {
 		return cj_num;
 	}
-	public void setCj_num(Double cj_num) {
+	public void setCj_num(String cj_num) {
 		this.cj_num = cj_num;
 	}
-	public Double getZxs() {
+	public String getZxs() {
 		return zxs;
 	}
-	public void setZxs(Double zxs) {
+	public void setZxs(String zxs) {
 		this.zxs = zxs;
 	}
 	public String getHjlb() {
@@ -150,7 +150,6 @@ public class Score {
 				+ ", cj_num=" + cj_num + ", zxs=" + zxs + ", hjlb=" + hjlb + ", bylw=" + bylw + "]";
 	}
 
-	
 	
 	
 }

@@ -235,6 +235,17 @@ public class CoursesSchedule {
 	public void setJsxm(String jsxm) {
 		this.jsxm = jsxm;
 	}
+	@Override
+	public String toString() {
+		return "CoursesSchedule [code=" + code + ", message=" + message + ", raw_data=" + raw_data + ", APP_KEY="
+				+ APP_KEY + ", ID=" + ID + ", xn=" + xn + ", xq=" + xq + ", xh=" + xh + ", KCDM=" + KCDM + ", SKBJ="
+				+ SKBJ + ", stimezc=" + stimezc + ", DSZ=" + DSZ + ", xqj=" + xqj + ", JCInfo=" + JCInfo + ", room="
+				+ room + ", RKJSGH=" + RKJSGH + ", KCLBlMC=" + KCLBlMC + ", KHFS=" + KHFS + ", XF=" + XF + ", jsxs="
+				+ jsxs + ", SYXS=" + SYXS + ", SJXS=" + SJXS + ", QTXS=" + QTXS + ", JSM_XQ=" + JSM_XQ + ", lessname="
+				+ lessname + ", jsxm=" + jsxm + ", type=" + type + ", begin_time=" + begin_time + ", end_time="
+				+ end_time + ", week=" + week + ", required_course=" + required_course + ", session=" + session
+				+ ", list=" + list + "]";
+	}
 	
 	
 }

@@ -106,11 +106,12 @@
 			<version>7.0</version>
 		</dependency>
 		<!-- 导入Mysql数据库链接jar包 -->
-<!-- 		<dependency>
+		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.30</version>
-		</dependency> -->
+		</dependency>
+		<!-- 导入sqlserver数据库链接jar包 -->
 		<dependency>
 		    <groupId>com.microsoft.sqlserver</groupId>
 		     <artifactId>sqljdbc4</artifactId>
@@ -291,7 +292,7 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-		</plugins>
+		</plugins>  
 		<finalName>NIC_Wechat</finalName>
 	</build>
   

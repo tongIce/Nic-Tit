@@ -1,6 +1,7 @@
 package com.litt.micro.controller;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
 import com.litt.micro.entity.CoursesSchedule;
 import com.litt.micro.entity.Result;
+import com.litt.micro.entity.Score;
 import com.litt.micro.entity.Student;
 import com.litt.micro.entity.Yuangou;
 import com.litt.micro.mapper.CoursesScheduleMapper;
@@ -48,298 +50,248 @@ import com.litt.micro.util.stu.Rdata;
  * @author 18317
  *
  */
-
 @Controller
 @RequestMapping("/CoursesSchedule")
 public class CoursesScheduleController {
 
-	public static int count = 0;
-	public static ArrayList<CoursesSchedule> arrCourse = new ArrayList<CoursesSchedule>();
-	public static List list = new ArrayList();
-	public static List timetable = new ArrayList();
+	public static ArrayList<CoursesSchedule> arrCourse = new ArrayList<CoursesSchedule>();  //提取出来的学生信息
+	public static List list = new ArrayList();//处理后的学生信息
 	@Autowired
 	private ICoursesScheduleService CoursesScheduleImpl;
 
+
 	/**
-	 * 进行签名验证，确保是微校数据，验证成功则返回课表数据， 失败跳转到失败页面
-	 * 
-	 * @param request
-	 * @param response
-	 * @param raw_data
-	 * @param app_key
-	 * @throws IOException
+	 * @param param
+	 * @return
+	 * @throws Exception
 	 */
-
-	@RequestMapping(value = "/load",method=RequestMethod.POST)
+	@RequestMapping(value = "/load",produces="application/json;charset=UTF-8",method = RequestMethod.POST)
 	@ResponseBody
-	public ModelAndView   load(@RequestBody String param) throws IOException// 将JSON字符串中的两个变量的值分别赋予了两个字符串
-	{			
-		/*Yuangou gou = new Yuangou();
-		gou.setName("袁通");
-		gou.setBar("汪汪汪");
-		
-		Yuangou  gou1 = new Yuangou();
-		gou1.setName("lin1");
-		gou1.setBar("sssss");
-		Yuangou  gou2 = new Yuangou();
-		gou2.setName("圆筒");
-		gou2.setBar("汪汪汪");
-		List<Yuangou> list  =new ArrayList<>();
-		list.add(gou1);
-		list.add(gou2);
-		
-		gou.setList(list);
-		
-		return gou;*/
-		
-		
-		
-		
-		// 接收微校发送的数据(因为以Post方式传过来，需要特定方式接收)
-		System.out.println(param);
-		JSONObject parse = JSONObject.parseObject(param);
-		System.out.println("param=" + param);
-		String raw_data = parse.getString("raw_data");
-		String app_key = parse.getString("app_key");
-		System.out.println("app_key=" + app_key);
-		HttpServletRequest request = null;
-		// 解密
-		String DeString = null;
-		try {
-			DeString = AES.Decrypt(raw_data, app_key, StudentController.app_secret.substring(0, 16));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println("解密后的数据:" + DeString);
 
+	public String load(@RequestBody String param) throws Exception
+	{	
+
+		String parse = param;
 		
-		/* * JSONObject json = JSONObject.parseObject(DeString); String car_number
-		 * =json.getString("card_number"); String app_key1
-		 * =json.getString("app_key"); String nonce_str
-		 * =json.getString("nonce_str"); Long str = (Long)
-		 * json.get("timestamp"); String timestamp = String.valueOf(str); String
-		 * sign =json.getString("sign");*/
+		//接收post数据并解析出row_data,app_key
+		Map<String, String> map_a = Deal_Post(parse);
+		String raw_data = map_a.get("raw_data");
+		String app_key = map_a.get("app_key");
+		//System.out.println("raw_data : "+raw_data+"   "+"app_key : "+app_key);
+		
+		//对raw_data进行解密并解析出card_number，app_key，nonce_str，timestamp，sign
+		Map<String, String> map_b = Deal_Row_Date(raw_data,app_key);
+		String card_number = map_b.get("card_number");
+		String app_key1 = map_b.get("app_key");
+		String nonce_str = map_b.get("nonce_str");
+		String timestamp = map_b.get("timestamp");
+		String sign = map_b.get("sign");
+		
+		//签名认证
+		if (com.litt.micro.util.SignUtil.KBcheckSignature(card_number,
+				app_key1, timestamp, nonce_str, sign))
+		 {
+		 System.out.println("签名正确");
+		//获取当前   年月;学年学期
+		 Map<String,Object> map_c = getDate();
+		 int year = (int) map_c.get("year");
+		 String xn = (String) map_c.get("xn");
+		 String xq = (String) map_c.get("xq");
 		 
-
-		DeString = DeString.replace("{", "");
-		DeString = DeString.replace("}", "");
-		System.out.println("FinalDeString=" + DeString);
-		Map<String, String> map = new HashMap<String, String>();
-		String str[] = DeString.split(",");
-		String arr[] = new String[2];
-		for (int i = 0; i < str.length; i++) {
-			arr = str[i].split(":");
-			arr[0] = arr[0].replaceAll("\"", "");
-			arr[1] = arr[1].replaceAll("\"", "");
-			System.out.print(arr[0]);
-			System.out.println("   " + arr[1]);
-			map.put(arr[0], arr[1]);
-		}
-		String card_number = map.get("card_number");
-		String app_key1 = map.get("app_key");
-		String nonce_str = map.get("nonce_str");
-		String timestamp = map.get("timestamp");
-		String sign = map.get("sign");
-		System.out.println("card_number=" + card_number + "   app_key1=" + app_key1 + "   nonce_str=" + nonce_str
-				+ "  timestamp=" + timestamp + "  sign=" + sign);
-
-		// 获取当前年月
-		Calendar cal = Calendar.getInstance();
-		int year = cal.get(Calendar.YEAR);
-		int month = cal.get(Calendar.MONTH) + 1;
-		System.out.println(year + "年" + month + "月");
-
-		// 计算学年和学期并为其赋值
-		String xn, xq;
-		if (month <= 7) {
-			year = year - 1;
-			xn = String.valueOf(year);
-			xq = "1";
-		} else {
-			xn = String.valueOf(year);
-			xq = "0";
-		}
-      
-		String xh = card_number;
-
-
+		 
 		// 查询并取出数据
-		arrCourse = CoursesScheduleImpl.finStudentByCard_number(xh, xn, xq);
+		arrCourse = CoursesScheduleImpl.finStudentByCard_number(card_number, xn, xq);
+		System.out.println("总共"+arrCourse.size()+"条数据");
+		for(int i=0;i<arrCourse.size();i++){
+			System.out.println(arrCourse.get(i).toString());
+		}
 		
-		Yuangou yuangou=new Yuangou();
-		yuangou.setXh(card_number);
-		yuangou.setType("0");
-		yuangou.setSession(arrCourse.get(0).getXn() + TermNumber.TermNumberConvert(arrCourse.get(0).getXq()));
+		//封装rowdate
+		String strEncryp = Deal_RowDate(card_number,year);
+		list.clear();  //清空list，防止切换周数后在原数据基础上再添加
 		
-		
-		// 封装数据
-		/*Map<String, String> arrayMap = new HashMap<String, String>();
-		List<Map> arraylist=new ArrayList<Map>();
-		JSONObject obj= new JSONObject();
-		obj.put("card_number", card_number);
-		obj.put("type", "0");
-		obj.put("session", arrCourse.get(0).getXn() + TermNumber.TermNumberConvert(arrCourse.get(0).getXq()));
+		//给微校返回的数据
+		 String  jstu1 = Deal_Back(strEncryp,app_key);
+		 //String jstu = new String(jstu1.getBytes("gbk"),"UTF-8");
+		 return jstu1;  
+		 }
+ 	else{
+		 System.out.println("签名错误");
+		 String  jstu1 = FDeal_Back(app_key);
+		 return jstu1;
+		 }
+	}
 
-		// 封装timetable
-		for (int i = 0; i < arrCourse.size(); i++) {
-			System.out.println("共取出:" + arrCourse.size() + "条数据");
-			String regex = "\\d{1,}-\\d{1,}";
-			Pattern pat = Pattern.compile(regex);
-			Matcher mat = pat.matcher(arrCourse.get(i).getStimezc());
+	
+		//接收post数据并解析出row_data,app_key
+		public static Map<String, String> Deal_Post(String param){
+		// 接收微校发送的数据(因为以Post方式传过来的是json配对的字符串，将其转换成jsonobjec形式方便提取信息)
+			Map<String, String> map = new HashMap<String, String>();
+			JSONObject parse = JSONObject.parseObject(param);
+			String raw_data = parse.getString("raw_data");
+			String app_key = parse.getString("app_key");
+			map.put("raw_data",raw_data);
+			map.put("app_key", app_key);
+			return map;	
+		}
 
-			// 如果匹配1-16周情况(型如stimezc='1-16')
-			if (mat.matches()) {
+		//对raw_data进行解密并解析出card_number，app_key，nonce_str，timestamp，sign
+		public static Map<String, String> Deal_Row_Date(String raw_data,String app_key){
+			
+			String DeString = null;
+			try {
+				DeString = AES.Decrypt(raw_data, app_key, StudentController.app_secret.substring(0, 16));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+/*	  		  JSONObject json = JSONObject.parseObject(DeString); 
+			  String card_number=json.getString("card_number"); 
+			  String app_key1=json.getString("app_key"); 
+			  String nonce_str=json.getString("nonce_str"); 
+			  String timestamp = json.getString("timestamp");
+//			  Long str1 = (Long)json.get("timestamp"); 
+//			  String timestamp = String.valueOf(str1);
+			  String  sign =json.getString("sign");
+			  System.out.println(card_number+'\t'+app_key);*/
+			 
+
+			DeString = DeString.replace("{", "");
+			DeString = DeString.replace("}", "");
+			Map<String, String> map = new HashMap<String, String>();
+			String str[] = DeString.split(",");
+			String arr[] = new String[2];
+			for (int i = 0; i < str.length; i++) {
+				arr = str[i].split(":");
+				arr[0] = arr[0].replaceAll("\"", "");
+				arr[1] = arr[1].replaceAll("\"", "");
+				map.put(arr[0], arr[1]);
+			}
+			return map;
+		}
+
+		//获取当前   年月;学年学期
+		public static Map<String, Object> getDate(){
+			Map<String,Object> map = new HashMap<String,Object>();
+			// 获取当前年月
+			Calendar cal = Calendar.getInstance();
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH) + 1;
+
+			// 计算学年和学期并为其赋值（数据库中的信息本学期的上学期是本学期的课表）
+			String xn, xq;
+			if (month <= 7) {
+				year = year - 1;
+				xn = String.valueOf(year);
+				xq = "1";
+			} else {
+				xn = String.valueOf(year);
+				xq = "0";
+			}
+			map.put("year", year);
+			map.put("month", month);
+			map.put("xn", xn);
+			map.put("xq", xq);
+			return map;
+		}
+	
+		//获得学生信息time_table返回给list
+		public static List Deal_time_table(){
+			for (int i = 0; i < arrCourse.size(); i++) {
+				String regex = "\\d{1,}-\\d{1,}";
+				Pattern pat = Pattern.compile(regex);
+				Matcher mat = pat.matcher(arrCourse.get(i).getStimezc());
+
+				// 如果匹配1-16周情况(型如stimezc='1-16')
+				if (mat.matches()) {
 						// stimezc按"-"进行分割
 						String stimezc = arrCourse.get(i).getStimezc();
 						String strr[] = stimezc.split("-");
 						int low = Integer.valueOf(strr[0]);
 						int high = Integer.valueOf(strr[1]);
-						System.out.println("low=" + low + "  high=" + high);
-		
-						*//**
+						/**
 						 * 封装每条记录(每一条重复封装好多次)
-						 *//*
+						 */
 						for (int x = low; x <= high; x++) {
-							arrayMap.put("course_id", arrCourse.get(i).getKCDM());
-							arrayMap.put("course_class", arrCourse.get(i).getXqj().substring(2, 3));
-							arrayMap.put("begin_time", Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
-							arrayMap.put("end_time", Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
-							arrayMap.put("course_name", arrCourse.get(i).getLessname());
-							arrayMap.put("teacher", arrCourse.get(i).getJsxm());
-							arrayMap.put("day", arrCourse.get(i).getXqj().substring(1, 2));
-							arrayMap.put("class_name", arrCourse.get(i).getSKBJ());
-							arrayMap.put("week", String.valueOf(x));
-							arrayMap.put("address", arrCourse.get(i).getRoom());
-							arrayMap.put("required_course", "-1");
-							arraylist.add(arrayMap);
-							arrayMap = new HashMap<String, String>();
-				        }		
-			  }
+							Result result=new Result();
+							result.setCourse_id(arrCourse.get(i).getKCDM());
+							result.setCourse_class(arrCourse.get(i).getXqj().substring(2, 3));
+							result.setBegin_time(Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
+							result.setEnd_time(Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
+							result.setCourse_name(arrCourse.get(i).getLessname());
+							result.setTeacher(arrCourse.get(i).getJsxm());
+							result.setDay(arrCourse.get(i).getXqj().substring(1, 2));
+							result.setClass_name(arrCourse.get(i).getSKBJ());
+							result.setWeek(String.valueOf(x));
+							result.setAddress(arrCourse.get(i).getRoom());
+							result.setRequired_course("-1");
+							list.add(result);
+				        }	
+				  }
 
-			// 单周上课情况(如形式与政策stimezc='8'/stimezc='12')
-			else {
-					arrayMap.put("course_id", arrCourse.get(i).getKCDM());
-					arrayMap.put("course_class", arrCourse.get(i).getXqj().substring(2, 3));
-					arrayMap.put("begin_time", Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
-					arrayMap.put("end_time", Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
-					arrayMap.put("course_name", arrCourse.get(i).getLessname());
-					arrayMap.put("teacher", arrCourse.get(i).getJsxm());
-					arrayMap.put("day", arrCourse.get(i).getXqj().substring(1, 2));
-					arrayMap.put("class_name", arrCourse.get(i).getSKBJ());
-					arrayMap.put("week", String.valueOf(arrCourse.get(i).getStimezc()));
-					arrayMap.put("address", arrCourse.get(i).getRoom());
-					arrayMap.put("required_course", "-1");
-					arraylist.add(arrayMap);
-					arrayMap = new HashMap<String, String>();
-			  }
+				// 不连续上课情况(如形式与政策stimezc='8'/stimezc='12')
+				else {
+					Result result=new Result();
+					result.setCourse_id(arrCourse.get(i).getKCDM());
+					result.setCourse_class(arrCourse.get(i).getXqj().substring(2, 3));
+					result.setBegin_time(Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
+					result.setEnd_time(Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
+					result.setCourse_name(arrCourse.get(i).getLessname());
+					result.setTeacher(arrCourse.get(i).getJsxm());
+					result.setDay(arrCourse.get(i).getXqj().substring(1, 2));
+					result.setClass_name(arrCourse.get(i).getSKBJ());
+					result.setWeek(String.valueOf(arrCourse.get(i).getStimezc()));
+					result.setAddress(arrCourse.get(i).getRoom());
+				    result.setRequired_course("-1");
+					list.add(result);	
+				  }
+			}
+			return list;		
+		}
+		
+		//封装rowdate
+		public static String Deal_RowDate(String card_number,int year){
+			Yuangou FZ=new Yuangou();
+			FZ.setCard_number(card_number);
+			FZ.setType("0");
+			FZ.setSession(year+ TermNumber.TermNumberConvert(arrCourse.get(0).getXq()));
 			
+			//获得学生信息time_table
+			List list = Deal_time_table();
+			System.out.println("本学期全部课程数："+list.size());
+			
+			FZ.setTimetable(list);
+			//rowdate转成json字符串
+			String jstu = JSONObject.toJSONString(FZ);
 
+	        String cKey=StudentController.app_key;
+	        String cIv=StudentController.app_secret.substring(0, 16);
+	        String  strEncryp = null;
+	        
+			try {
+	           strEncryp=AES.Encrypt(jstu, cKey, cIv);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+			// System.out.println("strEncryp : "+strEncryp);
+			 //System.out.println("解密后："+new String(AES.Decrypt(strEncryp,cKey,cIv))); 
+			 
+	        return strEncryp;       
 		}
-		
-		
-		obj.put("timetable", arraylist);
-		timetable.add(obj);
-		JSONArray jsonArray1 = JSONArray.fromObject(timetable);
-		System.out.println("共"+jsonArray1.size()+"条数据");
-		for (int j = 0; j < jsonArray1.size(); j++) {
-             
-			System.out.println("JSON:" + jsonArray1.get(j));
-		}
-         for(int h=0;h<timetable.size();h++)
-         {
-        	 System.out.println("timetable:"+timetable.get(h));
-         }*/
-		
-         
 
+		//请求成功返回的数据
+		public static String Deal_Back(String strEncryp,String app_key){
+		    Map<String,Object> mapp = new HashMap<String,Object>();
+		    mapp.put("code", 0);                                
+		    mapp.put("message", "success");    
+		    mapp.put("raw_data", strEncryp);
+		    mapp.put("app_key", app_key);
+		    System.out.println(mapp);
+		    String jstu1 = JSONObject.toJSONString(mapp);
+		    //System.out.println(jstu1);
+		    return jstu1;
+		
 
-				// 封装timetable
-				for (int i = 0; i < arrCourse.size(); i++) {
-					System.out.println("共取出:" + arrCourse.size() + "条数据");
-					String regex = "\\d{1,}-\\d{1,}";
-					Pattern pat = Pattern.compile(regex);
-					Matcher mat = pat.matcher(arrCourse.get(i).getStimezc());
-
-					// 如果匹配1-16周情况(型如stimezc='1-16')
-					if (mat.matches()) {
-								// stimezc按"-"进行分割
-								String stimezc = arrCourse.get(i).getStimezc();
-								String strr[] = stimezc.split("-");
-								int low = Integer.valueOf(strr[0]);
-								int high = Integer.valueOf(strr[1]);
-								System.out.println("low=" + low + "  high=" + high);
-				
-								/**
-								 * 封装每条记录(每一条重复封装好多次)
-								 */
-								for (int x = low; x <= high; x++) {
-									Result result=new Result();
-									result.setKCDM(arrCourse.get(i).getKCDM());
-									result.setXqj(arrCourse.get(i).getXqj().substring(2, 3));
-									result.setBegin_time(Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
-									result.setEnd_time(Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
-									result.setLessname(arrCourse.get(i).getLessname());
-									result.setJsxm(arrCourse.get(i).getJsxm());
-									result.setXqj(arrCourse.get(i).getXqj().substring(1, 2));
-									result.setSKBJ(arrCourse.get(i).getSKBJ());
-									result.setWeek(String.valueOf(x));
-									result.setRoom(arrCourse.get(i).getRoom());
-									result.setRequired_course("-1");
-									list.add(result);
-						        }		
-					  }
-
-					// 单周上课情况(如形式与政策stimezc='8'/stimezc='12')
-					else {
-						Result result=new Result();
-						result.setKCDM(arrCourse.get(i).getKCDM());
-						result.setXqj(arrCourse.get(i).getXqj().substring(2, 3));
-						result.setBegin_time(Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
-						result.setEnd_time(Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
-						result.setLessname(arrCourse.get(i).getLessname());
-						result.setJsxm(arrCourse.get(i).getJsxm());
-						result.setXqj(arrCourse.get(i).getXqj().substring(1, 2));
-						result.setSKBJ(arrCourse.get(i).getSKBJ());
-						result.setWeek(String.valueOf(arrCourse.get(i).getStimezc()));
-						result.setRoom(arrCourse.get(i).getRoom());
-					    result.setRequired_course("-1");
-						list.add(result);
-							
-					  }
-					
-				}
-				
-				yuangou.setList(list);
-		
-		
-		
-		
-		//加密
-         System.out.println("转换成字符串后为:"+yuangou.toString());
-         String cKey=StudentController.app_key;
-         System.out.println("cKey="+cKey);
-         String cIv=StudentController.app_secret.substring(0, 16);
-         System.out.println("cIv="+cIv);
-         String  strEncryp = null;
-		 try {
-			 //加密后的字符串
-            strEncryp=AES.Encrypt(yuangou.toString(), cKey, cIv);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-		 
-		 
-		//返回数据
-		 
-		    ModelAndView mav = new ModelAndView("result");          
-		    Map<String, String> mapp = new HashMap<String, String>();
-		    map.put("code", "0");                                
-		    map.put("message", "success");    
-		    map.put("raw_data", strEncryp);
-		    map.put("app_key", cKey);
-		    mav.addObject("map", map);                              
-		    return mav;
 		    
 		    /*Rdata data =new Rdata();
 	        data.setApp_key(cKey);
@@ -351,8 +303,7 @@ public class CoursesScheduleController {
 	        String jsonSMS = PostWithJson.JsonSMS("http://shi.tunnel.qydev.com/Nic-Tit/CoursesSchedule/load", para);
 	        System.out.println("这是返回的数据是"+jsonSMS);*/
 		/*
-		 * // 验证签名 if (com.litt.micro.util.SignUtil.checkSignature(car_number,
-		 * app_key1, timestamp, nonce_str, sign)) { System.out.println("签名正确");
+	
 		 * // 根据学号取得课表信息 CoursesSchedule
 		 * cs=CoursesScheduleImpl.finStudentByCard_number(car_number);
 		 * 
@@ -363,7 +314,16 @@ public class CoursesScheduleController {
 		 */
 
 		//return yuangou;
-		    
-	}
-
+		}
+		//请求失败返回的数据
+		public static String FDeal_Back(String app_key){
+		    Map<String,Object> mapp = new HashMap<String,Object>();
+		    mapp.put("code", 1);                                
+		    mapp.put("message", "false");    
+		    mapp.put("raw_data", " ");
+		    mapp.put("app_key", app_key);
+		    String jstu1 = JSONObject.toJSONString(mapp);
+			return jstu1;
+			
+		}
 }

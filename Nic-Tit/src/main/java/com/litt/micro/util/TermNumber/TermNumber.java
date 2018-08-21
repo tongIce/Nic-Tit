@@ -14,5 +14,14 @@ public class TermNumber {
 		}
 		
 	}
+	public static String TermNumberScore(String sNum)
+	{
+		switch(sNum)
+		{
+		case "0": return "01";
+		case "1": return "02";
+		default : return "01";
+		}
+	}
 
 }

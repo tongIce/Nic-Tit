@@ -5,29 +5,29 @@ import java.util.List;
 public class Result {
 	
 
-	private String KCDM;//课程代码
-	private String SKBJ;//上课班级
-	private String xqj;//k42
-	private String room;//授课教室
-	private String lessname;//课程名
-	private String jsxm;//教师姓名
+	private String course_id;//课程代码
+	private String course_class;//课程开始节次
 	private String begin_time;
 	private String end_time;
-	private String week;
+	private String course_name;// 课程名字
+	private String teacher;// 课程老师名字
+	private String day;		// 周几上课：1-周一；2-周二；以此类推
+	private String class_name;//班级名称
+	private String week;  // 第几周
+	private String address;//上课地点
 	private String required_course;
 	
-	
-	public String getRequired_course() {
-		return required_course;
+	public String getCourse_id() {
+		return course_id;
 	}
-	public void setRequired_course(String required_course) {
-		this.required_course = required_course;
+	public void setCourse_id(String course_id) {
+		this.course_id = course_id;
 	}
-	public String getWeek() {
-		return week;
+	public String getCourse_class() {
+		return course_class;
 	}
-	public void setWeek(String week) {
-		this.week = week;
+	public void setCourse_class(String course_class) {
+		this.course_class = course_class;
 	}
 	public String getBegin_time() {
 		return begin_time;
@@ -40,48 +40,58 @@ public class Result {
 	}
 	public void setEnd_time(String end_time) {
 		this.end_time = end_time;
-	}	
-	public String getKCDM() {
-		return KCDM;
 	}
-	public void setKCDM(String kCDM) {
-		KCDM = kCDM;
+	public String getCourse_name() {
+		return course_name;
 	}
-	public String getSKBJ() {
-		return SKBJ;
+	public void setCourse_name(String course_name) {
+		this.course_name = course_name;
 	}
-	public void setSKBJ(String sKBJ) {
-		SKBJ = sKBJ;
+	public String getTeacher() {
+		return teacher;
 	}
-	
-	
-	public String getXqj() {
-		return xqj;
+	public void setTeacher(String teacher) {
+		this.teacher = teacher;
 	}
-	public void setXqj(String xqj) {
-		this.xqj = xqj;
+	public String getDay() {
+		return day;
 	}
-	
-	public String getRoom() {
-		return room;
+	public void setDay(String day) {
+		this.day = day;
 	}
-	public void setRoom(String room) {
-		this.room = room;
+	public String getClass_name() {
+		return class_name;
 	}
-	
-	public String getLessname() {
-		return lessname;
+	public void setClass_name(String class_name) {
+		this.class_name = class_name;
 	}
-	public void setLessname(String lessname) {
-		this.lessname = lessname;
+	public String getWeek() {
+		return week;
 	}
-	public String getJsxm() {
-		return jsxm;
+	public void setWeek(String week) {
+		this.week = week;
 	}
-	public void setJsxm(String jsxm) {
-		this.jsxm = jsxm;
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getRequired_course() {
+		return required_course;
+	}
+	public void setRequired_course(String required_course) {
+		this.required_course = required_course;
+	}
+	@Override
+	public String toString() {
+		return "Result [course_id=" + course_id + ", course_class=" + course_class + ", begin_time=" + begin_time
+				+ ", end_time=" + end_time + ", course_name=" + course_name + ", teacher=" + teacher + ", day=" + day
+				+ ", class_name=" + class_name + ", week=" + week + ", address=" + address + ", required_course="
+				+ required_course + "]";
 	}
 
+	
 }
 
     

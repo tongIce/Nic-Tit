@@ -3,22 +3,23 @@ package com.litt.micro.entity;
 import java.util.List;
 
 public class Yuangou {
-	private String xh;
+	private String card_number;
 	private String type;
 	private String session;
-	private List<Yuangou>  list ;
+	private List<Result>  timetable ;
 	
-	public List<Yuangou> getList() {
-		return list;
+
+	public List<Result> getTimetable() {
+		return timetable;
 	}
-	public void setList(List<Yuangou> list) {
-		this.list = list;
+	public void setTimetable(List<Result> timetable) {
+		this.timetable = timetable;
 	}
-	public String getXh() {
-		return xh;
+	public String getCard_number() {
+		return card_number;
 	}
-	public void setXh(String xh) {
-		this.xh = xh;
+	public void setCard_number(String card_number) {
+		this.card_number = card_number;
 	}
 	public String getType() {
 		return type;
@@ -32,6 +33,6 @@ public class Yuangou {
 	public void setSession(String session) {
 		this.session = session;
 	}
-	
+
 	
 }

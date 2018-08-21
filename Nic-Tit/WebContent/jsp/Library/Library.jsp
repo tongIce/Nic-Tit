@@ -15,7 +15,6 @@
 
 </head>
 <body>
-      
       <a href="http://wechat.v2.traceint.com/index.php/schoolpush/registerLogin?
 sch_id=${sch_id}&stud_no=${stud_no}&stud_name=${stud_name}&sign=${sign}"><font size="40px">图书馆选座系统</font></a>
 </body>

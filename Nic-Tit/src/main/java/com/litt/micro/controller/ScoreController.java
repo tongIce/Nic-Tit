@@ -1,6 +1,10 @@
 package com.litt.micro.controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,9 +14,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.JsonObject;
+import com.litt.micro.entity.CoursesSchedule;
+import com.litt.micro.entity.NewScore;
 import com.litt.micro.entity.Score;
 import com.litt.micro.entity.Student;
 import com.litt.micro.service.IExamineeService;
@@ -21,98 +28,159 @@ import com.litt.micro.service.IStudentService;
 import com.litt.micro.util.SignUtil;
 import com.litt.micro.util.WeixinUtil;
 import com.litt.micro.util.AES.AES;
+import com.litt.micro.util.TermNumber.TermNumber;
 import com.litt.micro.util.stu.MicroStu;
 
+/**
+ * 查成绩
+ * @author Cardiac
+ *
+ */
 @Controller
 @RequestMapping("/Score")
 public class ScoreController {
 	
-	@Autowired
-	private IStudentService studentServiceImpl;
-	private IScoreService scoreserverimpl;
-	
-	
-	
-	@RequestMapping("getScoreInfo")
-	public String getScoreInfo(HttpServletRequest request,String card_number,String XQ,String KCDM){
-		System.out.println(card_number+" "+XQ+" "+KCDM);
-		Score sc=scoreserverimpl.findScore(card_number,XQ,KCDM);
 
-		System.out.println(sc.getHjlb());
-		return "/jsp/error/null";
-	}
+	public static ArrayList<Score> arrScore = new ArrayList<Score>();  //提取出来的学生信息
+	public static Map<String,List> list = new HashMap<String,List>();  //存储result
 	
-	
-	//测试写的其他可以使用
-	@RequestMapping("test")
-	public String test(HttpServletRequest request,String name, String number){
-		
-		Student stu=studentServiceImpl.findStu(name, number);
-		System.out.println(stu);
+	@Autowired
+	private IScoreService scoreserverimpl;	
+
+	@RequestMapping(value="/test")
+	public String test(HttpServletRequest Request,String card_number){
+		List l=new ArrayList<Score>();
+		l = scoreserverimpl.findScore(card_number);
+		for(int i=0;i<l.size();i++)
+			System.out.println(l.get(i));
 		return "/jsp/error/null";
-		
 	}
 	
 	
 	/**
-	 * 进行签名验证，确保是微校数据，验证成功则跳转到登录，
-	 * 失败跳转到失败页面
-	 * @param state
-	 * @param app_key
-	 * @param timestamp
-	 * @param nonce_str
-	 * @param sign
+	 * @param param
+	 * @return
+	 * @throws Exception
 	 */
-	
-	
-	@RequestMapping(value = "/sign",method = {RequestMethod.POST,RequestMethod.GET})
-	/*public String  load(HttpServletRequest request,HttpServletResponse response, String state ,String app_key ,
-		   String card_number,String timestamp,String nonce_str,String sign,String code )*/
-	public String  load(@RequestBody String para) {
-		//接受微笑提供的信息(是以post形式传过来的，需要特定方式接受)
-		JSONObject  nparse = (JSONObject) JSONObject.parse(para);
-		System.out.println(para);
-/*		String app_key = (String) nparse.get("app_key");
-		String raw_data =(String) nparse.get("raw_data");
-		System.out.println("666");
-		//将微校传来的raw_data进行解密
-        String DeString = AES.Decrypt(raw_data, app_key, (StudentController.app_secret).substring(0, 16));
-        System.out.println("解密后的字串是：" + DeString);
-        
-           //解密之后进行信息提取
-        JSONObject  nDeString = (JSONObject) JSONObject.parse(DeString);
-        String card_number = (String) nDeString.get("card_number");
-        String nonce_str = (String) nDeString.get("nonce_str");
-        String timestamp = (String) nDeString.get("timestamp");
-        String sign = (String) nDeString.get("sign"); 
-        System.out.println(card_number+" "+nonce_str+" "+timestamp+" "+sign);*/
-        //签名验证
-     /*if (SignUtil.checkSignature(card_number,app_key, timestamp, nonce_str,sign)) {
-        	//获取学生信息
-           
-            
-             //填充微校必须的字段(学号，姓名，年级，学院/部门，专业，手机号和身份证不能同时为空)
-            MicroStu mstu = new MicroStu();
-            
-            
-            //加密之后
-            String param =" ";
-  		 request.getSession().setAttribute("code", 0);
-   		 request.getSession().setAttribute("message", "success");
-   		 request.getSession().setAttribute("param", param);
-   		 request.getSession().setAttribute("app_key", app_key); 
-   		 return "/jsp/Score/Score";
-        }else{
-        	return "/jsp/error/error";
-        }*/
-        //@1如何将解密后的字符串中的信息单独提取出来？？？,包括card_number,app_key,nonce_str,timestamp,sign
-		return " ";
-        
-        
-        //@2用微笑的验证方式5个参数，缺少state这个参数
-        //  用腾讯的验证方式3个参数，  用哪个？？？   进而设置code，message
-        
-        //@3 通过card_number查询学生信息  还需要自己写通过card_number查询学生信息的方法？？？？
-	}
-	
+	@RequestMapping(value = "/sign",method = RequestMethod.POST)
+	@ResponseBody
+	public String  load(@RequestBody String param) throws Exception{
+		String parse = param;
+		//接收post数据并解析出row_data,app_key
+		Map<String, String> map_a = CoursesScheduleController.Deal_Post(parse);
+		String raw_data = map_a.get("raw_data");
+		String app_key = map_a.get("app_key");
+//		System.out.println("raw_data : "+raw_data+"   "+"app_key : "+app_key);
+		
+		//对raw_data进行解密并解析出card_number，app_key，nonce_str，timestamp，sign
+		Map<String, String> map_b = CoursesScheduleController.Deal_Row_Date(raw_data,app_key);
+		String card_number = map_b.get("card_number");
+		String app_key1 = map_b.get("app_key");
+		String nonce_str = map_b.get("nonce_str");
+		String timestamp = map_b.get("timestamp");
+		String sign = map_b.get("sign");
+        /*System.out.println(card_number+" "+nonce_str+" "+timestamp+" "+sign);*/
+		
+		//签名认证
+		 if (com.litt.micro.util.SignUtil.KBcheckSignature(card_number,
+		 app_key1, timestamp, nonce_str, sign))
+		 {
+			 System.out.println("签名正确");
+			// 查询并取出数据
+			 arrScore = scoreserverimpl.findScore(card_number);
+			 System.out.println("总共"+arrScore.size()+"条");
+			 /*	for(int i=0;i<arrScore.size();i++){
+				 System.out.println(arrScore.get(i));
+			 }*/
+			//获得学生信息time_table返回给list
+			 Deal_time_table();
+			 
+			//封装rowdate
+			String strEncryp = Deal_RowDate(card_number);
+			list.clear();  //清空list，防止切换周数后在原数据基础上再添加
+			 
+			//给微校返回的数据
+			 String  jstu1 = CoursesScheduleController.Deal_Back(strEncryp,app_key);
+			 return jstu1; 
+		 }
+		 else{
+			 System.out.println("签名错误");
+			 String  jstu1 = CoursesScheduleController.FDeal_Back(app_key);
+			 return jstu1;
+		 }
+}
+
+		//获得学生信息result返回给list
+		public static Map<String,List> Deal_time_table(){
+			if(arrScore != null)
+			{
+				String Com = arrScore.get(0).getXN() +TermNumber.TermNumberScore(arrScore.get(0).getXQ());
+				List brrScore = new ArrayList();
+				for(int i=0;i<arrScore.size();i++){	
+					
+					String Date = arrScore.get(i).getXN() +TermNumber.TermNumberScore(arrScore.get(i).getXQ());
+					
+					if(Date.equals(Com))
+					{
+						NewScore newScore = new NewScore();
+						newScore.setCourse_id(arrScore.get(i).getKCDM());
+						newScore.setCourse_name(arrScore.get(i).getKCMC());
+						newScore.setScore(arrScore.get(i).getCj_num());
+						newScore.setGpa(arrScore.get(i).getXFJD());
+						brrScore.add(newScore);
+						if(i == (arrScore.size()-1))
+						{
+							System.out.println(Com);
+							list.put(Com, brrScore);
+						}
+					}
+					else
+					{
+						System.out.println(Com);
+
+						list.put(Com, brrScore);
+						brrScore = new ArrayList<NewScore>();
+						Com = Date;
+						i--;
+					}
+					
+				}
+
+				for(int i=0;i<list.size();i++)
+					for(Object value : list.keySet()){  //只能遍历value
+						System.out.println("Value = "+value);
+						System.out.println(list.get(value));
+					}
+				String jstu = JSONObject.toJSONString(list);
+//				System.out.println(list);
+//				System.out.println(jstu);	
+			}
+			return list;
+		}
+		
+		//封装rowdate
+		public static String Deal_RowDate(String card_number) throws Exception{
+			Map map = new HashMap();
+			map.put("card_number", card_number);
+			//获得学生信息result
+			Deal_time_table();
+			map.put("result", list);
+			
+			//rowdate转成json字符串
+			String jstu = JSONObject.toJSONString(map);
+
+	        String cKey=StudentController.app_key;
+	        String cIv=StudentController.app_secret.substring(0, 16);
+	        String  strEncryp = null;
+	        
+			try {
+	           strEncryp=AES.Encrypt(jstu, cKey, cIv);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}	
+			 System.out.println("strEncryp : "+strEncryp);
+			 System.out.println("解密后："+new String(AES.Decrypt(strEncryp,cKey,cIv))); 
+			 
+	        return strEncryp;       
+		}
 }
