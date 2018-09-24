@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">   <!-- 简体中文页面 -->
+    <meta charset="UTF-8">	<!-- 告知浏览器此页面属于什么字符编码格式 -->
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>太原工业学院</title>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=wDYEcxgRRheZwyC9jpN1Tt7fzr2zjosZ"></script> 	<!-- 调用百度API --> 
+    <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script><!--调用jQuery-->
+
+  <style type="text/css">
+        body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+    </style> 
+
+</head>
+
+<body>  
+   <div id="allmap"></div>
+</body>  
+</html>  
+<script type="text/javascript">  
+
+    var map = new BMap.Map("allmap");  // 创建地图实例 
+    var point = new BMap.Point(112.552108,37.964127);	// 创建点坐标 
+    map.centerAndZoom(point, 16);  	 // 初始化地图，设置中心点坐标和地图级别
+    map.enableScrollWheelZoom(); 	// 启动鼠标滚轮操作
+
+    var myIcon = new BMap.Icon("http://api.map.baidu.com/img/markers.png",new BMap.Size(30,30),{
+        anchor: new BMap.Size(10,10)    
+    });
+
+    var marker=new BMap.Marker(point,{icon: myIcon});  
+    map.addOverlay(marker);  
+
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r){
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            var mk = new BMap.Marker(r.point);
+            map.addOverlay(mk);
+            //map.panTo(r.point);//地图中心点移到当前位置
+            var latCurrent = r.point.lat;
+            var lngCurrent = r.point.lng;
+            //alert('我的位置：'+ latCurrent + ',' + lngCurrent);
+
+            location.href="http://api.map.baidu.com/direction?origin="+latCurrent+","+lngCurrent+"&destination=37.964127,112.552108&mode=driving&region=太原&output=html";
+
+        }
+        else {
+            alert('failed'+this.getStatus());
+        }        
+    },{enableHighAccuracy: true})
+
+
+    map.addOverlay(marker);  
+    var licontent="<b>太原工业学院</b><br>";  
+        licontent+="<span><strong>地址：</strong>山西省太原市尖草坪区迎新街北一巷2号</span><br>";  
+        licontent+="<span><strong>电话：</strong>(0351)3568812</span><br>";         
+    var opts = { 
+        width : 200,
+        height: 80,
+    };         
+    var  infoWindow = new BMap.InfoWindow(licontent, opts);  
+    marker.openInfoWindow(infoWindow);  
+    marker.addEventListener('click',function(){
+        marker.openInfoWindow(infoWindow);
+    });  
+
+</script>

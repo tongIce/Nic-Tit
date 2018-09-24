@@ -91,6 +91,22 @@ public class WebContextListener implements ServletContextListener {
 				.getWechatString("rootdirectory") + "/suggest/loadsuggest";
 		button24.setUrl(WeixinUtil.getOAuth2().replace("REDIRECT_URL",
 				suggestUrl));
+		
+		ViewButton button41 = new ViewButton();
+		button41.setName("腾讯微校");
+		button41.setType("view");
+		button41.setUrl("https://msg.weixiao.qq.com/t/8f0892ba133ea48218fcf1ea939f9752");
+		
+		ViewButton button42 = new ViewButton();
+		button42.setName("服务大厅");
+		button42.setType("view");
+		button42.setUrl("http://msg.weixiao.qq.com/t/831c89ee9d5d32fad3ae84ccbbafbe6e?ADTAG=6214");
+		
+		Button button4 = new Button();
+		button4.setName("腾讯微校");
+		button4.setSub_button(new Button[] { button41, button42
+				});
+		
 		ViewButton button3 = new ViewButton();
 		button3.setName("关于我们");
 		button3.setType("view");
@@ -101,12 +117,12 @@ public class WebContextListener implements ServletContextListener {
 		button2.setName("业务对接");
 		button2.setSub_button(new Button[] { button21, button22, button23,
 				button24 });
-
+		
 		Button button1 = new Button();
 		button1.setName("数字校园");
 		button1.setSub_button(new Button[] { button11, button12,button13,button14 });
 		//为菜单，添加button按钮。
-		menu.setButton(new Button[] { button2, button3 });
+		menu.setButton(new Button[] { button2,button4, button3 });
 		String jsonMenu = JSONObject.fromObject(menu).toString();
 		//初始化菜单栏
 		String url;

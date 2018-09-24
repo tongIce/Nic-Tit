@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.litt.micro.datasourse.DynamicDataSourceHolder;
 import com.litt.micro.entity.Score;
 import com.litt.micro.entity.Student;
 import com.litt.micro.service.IScoreService;
@@ -23,6 +24,12 @@ import com.litt.micro.util.WeixinUtil;
 import com.litt.micro.util.MD5.MD5;
 import com.litt.micro.util.prompt.HintoFront;
 
+
+/**
+ * 图书馆选座
+ * @author Cardiac
+ *
+ */
 @Controller
 @RequestMapping("/Library")
 public class LibraryController {

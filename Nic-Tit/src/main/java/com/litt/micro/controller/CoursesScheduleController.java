@@ -29,6 +29,7 @@ import net.sf.json.JSONArray;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.parser.Feature;
+import com.litt.micro.datasourse.DynamicDataSourceHolder;
 import com.litt.micro.entity.CoursesSchedule;
 import com.litt.micro.entity.Result;
 import com.litt.micro.entity.Score;
@@ -70,7 +71,6 @@ public class CoursesScheduleController {
 
 	public String load(@RequestBody String param) throws Exception
 	{	
-
 		String parse = param;
 		
 		//接收post数据并解析出row_data,app_key
@@ -144,17 +144,6 @@ public class CoursesScheduleController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-/*	  		  JSONObject json = JSONObject.parseObject(DeString); 
-			  String card_number=json.getString("card_number"); 
-			  String app_key1=json.getString("app_key"); 
-			  String nonce_str=json.getString("nonce_str"); 
-			  String timestamp = json.getString("timestamp");
-//			  Long str1 = (Long)json.get("timestamp"); 
-//			  String timestamp = String.valueOf(str1);
-			  String  sign =json.getString("sign");
-			  System.out.println(card_number+'\t'+app_key);*/
-			 
 
 			DeString = DeString.replace("{", "");
 			DeString = DeString.replace("}", "");
@@ -213,19 +202,61 @@ public class CoursesScheduleController {
 						 * 封装每条记录(每一条重复封装好多次)
 						 */
 						for (int x = low; x <= high; x++) {
-							Result result=new Result();
-							result.setCourse_id(arrCourse.get(i).getKCDM());
-							result.setCourse_class(arrCourse.get(i).getXqj().substring(2, 3));
-							result.setBegin_time(Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
-							result.setEnd_time(Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
-							result.setCourse_name(arrCourse.get(i).getLessname());
-							result.setTeacher(arrCourse.get(i).getJsxm());
-							result.setDay(arrCourse.get(i).getXqj().substring(1, 2));
-							result.setClass_name(arrCourse.get(i).getSKBJ());
-							result.setWeek(String.valueOf(x));
-							result.setAddress(arrCourse.get(i).getRoom());
-							result.setRequired_course("-1");
-							list.add(result);
+							
+							//单双周都上课
+							if(Integer.valueOf(arrCourse.get(i).getDSZ())==0)
+							{
+								Result result=new Result();
+								result.setCourse_id(arrCourse.get(i).getKCDM());
+								result.setCourse_class(arrCourse.get(i).getXqj().substring(2, 3));
+								result.setBegin_time(Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
+								result.setEnd_time(Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
+								result.setCourse_name(arrCourse.get(i).getLessname());
+								result.setTeacher(arrCourse.get(i).getJsxm());
+								result.setDay(arrCourse.get(i).getXqj().substring(1, 2));
+								result.setClass_name(arrCourse.get(i).getSKBJ());
+								result.setWeek(String.valueOf(x));
+								result.setAddress(arrCourse.get(i).getRoom());
+								result.setRequired_course("-1");
+								list.add(result);
+							}
+							
+							//仅单周上课
+							if(Integer.valueOf(arrCourse.get(i).getDSZ())==1&&x%2==1)
+							{
+								Result result=new Result();
+								result.setCourse_id(arrCourse.get(i).getKCDM());
+								result.setCourse_class(arrCourse.get(i).getXqj().substring(2, 3));
+								result.setBegin_time(Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
+								result.setEnd_time(Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
+								result.setCourse_name(arrCourse.get(i).getLessname());
+								result.setTeacher(arrCourse.get(i).getJsxm());
+								result.setDay(arrCourse.get(i).getXqj().substring(1, 2));
+								result.setClass_name(arrCourse.get(i).getSKBJ());
+								result.setWeek(String.valueOf(x));
+								result.setAddress(arrCourse.get(i).getRoom());
+								result.setRequired_course("-1");
+								list.add(result);
+							}
+							
+							//仅双周上课
+							if(Integer.valueOf(arrCourse.get(i).getDSZ())==2&&x%2==0)
+							{
+								Result result=new Result();
+								result.setCourse_id(arrCourse.get(i).getKCDM());
+								result.setCourse_class(arrCourse.get(i).getXqj().substring(2, 3));
+								result.setBegin_time(Timetable.startTime(arrCourse.get(i).getXqj().substring(2, 3)));
+								result.setEnd_time(Timetable.endTime(arrCourse.get(i).getXqj().substring(2, 3)));
+								result.setCourse_name(arrCourse.get(i).getLessname());
+								result.setTeacher(arrCourse.get(i).getJsxm());
+								result.setDay(arrCourse.get(i).getXqj().substring(1, 2));
+								result.setClass_name(arrCourse.get(i).getSKBJ());
+								result.setWeek(String.valueOf(x));
+								result.setAddress(arrCourse.get(i).getRoom());
+								result.setRequired_course("-1");
+								list.add(result);
+							}
+							
 				        }	
 				  }
 
@@ -248,6 +279,7 @@ public class CoursesScheduleController {
 			}
 			return list;		
 		}
+
 		
 		//封装rowdate
 		public static String Deal_RowDate(String card_number,int year){
@@ -290,30 +322,6 @@ public class CoursesScheduleController {
 		    String jstu1 = JSONObject.toJSONString(mapp);
 		    //System.out.println(jstu1);
 		    return jstu1;
-		
-
-		    
-		    /*Rdata data =new Rdata();
-	        data.setApp_key(cKey);
-	        data.setRaw_data(strEncryp);
-	        data.setCode("0");
-	        data.setMessage("success");
-	        String para = JSONObject.toJSONString(data);
-	        System.out.println("para="+para);
-	        String jsonSMS = PostWithJson.JsonSMS("http://shi.tunnel.qydev.com/Nic-Tit/CoursesSchedule/load", para);
-	        System.out.println("这是返回的数据是"+jsonSMS);*/
-		/*
-	
-		 * // 根据学号取得课表信息 CoursesSchedule
-		 * cs=CoursesScheduleImpl.finStudentByCard_number(car_number);
-		 * 
-		 * return "/jsp/CoursesSchedule/CoursesSchedule"; } else { //
-		 * 请求失败，需保证返回的code 不为 0。 // message 字段在 code 不为 0 时返回错误的信息。 message =
-		 * "fail"; System.out.println("签名失败"); return
-		 * "/jsp/error/CoursesSchedule"; }
-		 */
-
-		//return yuangou;
 		}
 		//请求失败返回的数据
 		public static String FDeal_Back(String app_key){

@@ -49,7 +49,7 @@
 		    		<td>  ${item.exIDcard }    </td>
 	    		</tr>
 	    		<tr class="conTr" align="left">
-		    		<th>名族</th>
+		    		<th>民族</th>
 		    		<td>   ${item.exNation }  </td>
 		    		<th>出生日期</th>
 		    		<td>  ${item.bornTostring }   </td>
@@ -108,7 +108,7 @@
 		    		<td>  ${item.exIDcard }    </td>
 	    		</tr>
 	    		<tr class="conTr" align="left">
-		    		<th>名族</th>
+		    		<th>民族</th>
 		    		<td>   ${item.exNation }  </td>
 		    		<th>出生日期</th>
 		    		<td>  ${item.bornTostring }   </td>
@@ -166,7 +166,7 @@
 		    		<td>  ${item.exIDcard }    </td>
 	    		</tr>
 	    		<tr class="conTr" align="left">
-		    		<th>名族</th>
+		    		<th>民族</th>
 		    		<td>   ${item.exNation }  </td>
 		    		<th>出生日期</th>
 		    		<td>  ${item.bornTostring }   </td>

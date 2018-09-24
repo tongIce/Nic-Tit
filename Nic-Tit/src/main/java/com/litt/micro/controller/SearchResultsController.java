@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.litt.micro.datasourse.DynamicDataSourceHolder;
 import com.litt.micro.entity.Examinee;
 import com.litt.micro.entity.Student;
 import com.litt.micro.service.IExamineeService;
@@ -26,16 +27,16 @@ public class SearchResultsController {
 	
 	@Autowired
 	private IExamineeService exServiceImpl;
-	
 	/*
 	 * 根据获取到的openid，查询出信息，再到examinee表里面查找出考生信息展示
 	 */
 	@RequestMapping("searchResults")
 	public String searchResults( HttpServletRequest request,String code) throws ParseException{
-		String openid = WeixinUtil.getOpenid(code);
-		//String openid  = "qweqwe123456";
+		//String openid = WeixinUtil.getOpenid(code);
+		String openid  = "o4RLBwVUUUCXypK0l7BaS9186-u0";
 		//通过回调，返回code获得openid，查找出学生，放到session域中
 		Student stu = exServiceImpl.findStudentByOpenid(openid);
+
 		//stu为空的情况没判断,因为表里面没有学号，通过班级查，bug点，一个班里面有重名的
 		List<Examinee> exList = exServiceImpl.findExamineeByNumName(stu.getStuName(), stu.getStuClass());
 		if(exList==null){

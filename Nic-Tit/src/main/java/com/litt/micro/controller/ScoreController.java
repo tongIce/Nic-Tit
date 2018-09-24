@@ -1,13 +1,11 @@
 package com.litt.micro.controller;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,19 +15,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonObject;
-import com.litt.micro.entity.CoursesSchedule;
+import com.litt.micro.datasourse.DynamicDataSourceHolder;
 import com.litt.micro.entity.NewScore;
 import com.litt.micro.entity.Score;
 import com.litt.micro.entity.Student;
 import com.litt.micro.service.IExamineeService;
 import com.litt.micro.service.IScoreService;
-import com.litt.micro.service.IStudentService;
-import com.litt.micro.util.SignUtil;
-import com.litt.micro.util.WeixinUtil;
 import com.litt.micro.util.AES.AES;
 import com.litt.micro.util.TermNumber.TermNumber;
-import com.litt.micro.util.stu.MicroStu;
 
 /**
  * 查成绩
@@ -44,11 +37,14 @@ public class ScoreController {
 	public static ArrayList<Score> arrScore = new ArrayList<Score>();  //提取出来的学生信息
 	public static Map<String,List> list = new HashMap<String,List>();  //存储result
 	
+	
 	@Autowired
 	private IScoreService scoreserverimpl;	
+	//检测数据库sqlserver的连接问题
+	@RequestMapping(value="/test1")
+	public String test1(HttpServletRequest Request,String card_number){
 
-	@RequestMapping(value="/test")
-	public String test(HttpServletRequest Request,String card_number){
+		System.out.println("进入");
 		List l=new ArrayList<Score>();
 		l = scoreserverimpl.findScore(card_number);
 		for(int i=0;i<l.size();i++)
@@ -56,7 +52,18 @@ public class ScoreController {
 		return "/jsp/error/null";
 	}
 	
-	
+	//检测的数据库mysql的连接问题
+	@Autowired
+	private IExamineeService iExamineeService;
+	@RequestMapping(value="/test2")
+	public String test2(HttpServletRequest Request,String openid){
+		//DynamicDataSourceHolder.setDataSource("dataSource1");
+		System.out.println("进入");
+		Student l=iExamineeService.findStudentByOpenid(openid);
+		System.out.println(l);
+		return "/jsp/error/null";
+	}
+
 	/**
 	 * @param param
 	 * @return
@@ -65,6 +72,8 @@ public class ScoreController {
 	@RequestMapping(value = "/sign",method = RequestMethod.POST)
 	@ResponseBody
 	public String  load(@RequestBody String param) throws Exception{
+		//切换到数据库sqlserver
+		
 		String parse = param;
 		//接收post数据并解析出row_data,app_key
 		Map<String, String> map_a = CoursesScheduleController.Deal_Post(parse);

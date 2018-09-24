@@ -272,14 +272,14 @@ public class WeixinUtil extends HttpServlet{
 			System.out.println("授权连接code--->"+url);
 			String openId="";
 			try {
-				URL getUrl=new URL(url);
-				HttpURLConnection http=(HttpURLConnection)getUrl.openConnection();
-				http.setRequestMethod("GET"); 
-				http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
-				http.setDoOutput(true);
-				http.setDoInput(true);
+				URL getUrl=new URL(url);	//表示Internet上某一资源的地址
+				HttpURLConnection http=(HttpURLConnection)getUrl.openConnection();//使用HttpURLConnection类，来访问HTTP协议的网络资源，HttpURLConnection对象不能直接构造，需要通过URL类中的openConnection方法类获得
+				http.setRequestMethod("GET"); //设置请求方式
+				http.setRequestProperty("Content-Type","application/x-www-form-urlencoded");//设置使用标准编码格式编码参数的名-值对
+				http.setDoOutput(true);            // 设置是否向HttpURLConnection输出
+				http.setDoInput(true);            // 设置是否从httpUrlConnection读入
 		
-				http.connect();
+				http.connect();            // 连接
 				InputStream is = http.getInputStream(); 
 				int size = is.available(); 
 				byte[] b = new byte[size];

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.litt.micro.mapper.SExaminationMapper">
+	<resultMap type="SExamination" id="SEResultMap">
+	<id column="XH" property="XH"/>
+		<result column="ID" property="ID"/>
+		<result column="XN" property="XN"/>
+		<result column="XQ" property="XQ"/>
+		<result column="KCH" property="KCH"/>
+		<result column="KSRQ" property="KSRQ"/>
+		<result column="kskssj" property="kskssj"/>
+		<result column="ksjssj" property="ksjssj"/>
+		<result column="kscd" property="kscd"/>
+		<result column="SKDD" property="SKDD"/>
+		<result column="ZWH" property="ZWH"/>
+		<result column="ZJKJS" property="ZJKJS"/>
+		<result column="FJKJS" property="FJKJS"/>
+	</resultMap>
+	
+			<!-- 根据card_number查找出学生所有SExamination-->
+		<select id="findSExamination"   resultMap="SEResultMap" >
+			select V_JW_KSAPSJLB.* 
+			from V_JW_KSAPSJLB 
+			WHERE XH=#{0} and XN=#{1} and XQ=#{2}
+			order by XN  asc , XQ asc
+		</select>
+	
+	</mapper>

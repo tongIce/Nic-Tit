@@ -45,10 +45,6 @@ public class StudentController {
 	
 	/**
 	 * 
-	 * @param state
-	 * @param card_number
-	 * @param app_key
-	 * @pa
 	 * ram timestamp
 	 * @param nonce_str
 	 * @param sign
@@ -184,7 +180,5 @@ public class StudentController {
         return "/jsp/success/success";
 		//return "redirect:/loadMicro?state="+state;
 	}
-	
-	
 	
 }

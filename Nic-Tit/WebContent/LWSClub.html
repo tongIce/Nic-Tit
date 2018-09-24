@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>零舞社</title>
+<meta name=”viewport” content=”width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no”/>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="stylesheet" href="css/Clubs.css">
+<style type="text/css">
+
+
+
+
+#close {
+	position: absolute;
+	width: 160px;
+	left: 50%;
+	margin-left: -80px;
+	bottom: 15%;
+	padding: 10px;
+	color: #fff;
+	border-color: #fff;
+}
+
+.item-logo0 {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background-image: url("images/LWSbegin.jpg");
+	background-size: 100%, 100%;
+	background-repeat: no-repeat;
+}
+
+.item-logo1 {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background-image: url("images/LWSone.jpg");
+	background-size: 100%, 100%;
+	background-repeat: no-repeat;
+}
+
+.item-logo2 {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background-image: url("images/LWStwo.jpg");
+	background-size: 100%, 100%;
+	background-repeat: no-repeat;
+}
+
+.item-logo3 {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background-image: url("images/LWSthree.jpg");
+	background-size: 100%, 100%;
+	background-repeat: no-repeat;
+}
+
+.item-logo4 {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background-image: url("images/LWSfour.jpg");
+	background-size: 100%, 100%;
+	background-repeat: no-repeat;
+}
+
+.item-logo5 {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	background-image: url("images/LWSlast.jpg");
+	background-size: 100%, 100%;
+	background-repeat: no-repeat;
+}
+
+.words {
+	font-size: 5vw;
+	top: 66vw;
+	right: 37vw;
+	color: red;
+}
+
+#kkk{
+                font-size:2vw;
+			    float:left;
+			    margin-top:100%;
+			    margin-left:34vw;
+}
+
+</style>
+
+
+</head>
+
+<body>
+	<div id="slider" class="mui-slider mui-fullscreen"
+		style="background-color: black;">
+		<div class="mui-slider-group">
+			<!-- 第一张 -->
+			<div class="mui-slider-item">
+				<div class="item-logo0"></div>
+			</div>
+			<!-- 第二张 -->
+			<div class="mui-slider-item">
+				<div class="item-logo1"></div>
+			</div>
+			<!-- 第三张 -->
+			<div class="mui-slider-item">
+				<div class="item-logo2"></div>
+			</div>
+			<!-- 第四张 -->
+			<div class="mui-slider-item">
+				<div class="item-logo3"></div>
+			</div>
+			<!-- 第五张 -->
+			<div class="mui-slider-item">
+				<div class="item-logo4"></div>
+			</div>
+			<!-- 第六张 -->
+			<div class="mui-slider-item">
+				<div class="item-logo5">
+				   <div id="kkk">
+					  <a class="words" href="http://msg.weixiao.qq.com/t/bba6584ce6e9f7532b1001d99802dfb5">>>点击链接<< </a>
+				   </div>
+				</div>
+			</div>
+		</div>
+		<div class="mui-slider-indicator">
+					<div class="mui-indicator mui-active"></div>
+					<div class="mui-indicator"></div>
+					<div class="mui-indicator"></div>
+					<div class="mui-indicator"></div>
+					<div class="mui-indicator"></div>
+					<div class="mui-indicator"></div>
+			</div>
+	</div>
+	<script src="js/Clubs.js"></script>
+	<script>
+			mui.back = function() {};
+			mui.plusReady(function() {
+				if(mui.os.ios){
+					plus.navigator.setFullscreen(true);
+				}
+				plus.navigator.closeSplashscreen();
+			});
+			//立即体验按钮点击事件
+			document.getElementById("close").addEventListener('tap', function(event) {
+				plus.storage.setItem("lauchFlag", "true");
+				plus.navigator.setFullscreen(false);
+				plus.webview.currentWebview().close();
+			}, false);
+			//图片切换时，触发动画
+			document.querySelector('.mui-slider').addEventListener('slide', function(event) {
+			 	//注意slideNumber是从0开始的；
+			 	var index = event.detail.slideNumber+1;
+			 	if(index==2||index==3){
+			 		var item = document.getElementById("tips-"+index);
+			 		if(item.classList.contains("mui-hidden")){
+			 			item.classList.remove("mui-hidden");
+			 			item.classList.add("guide-show");
+			 		}
+			 	}
+			});
+			
+		</script>
+</body>
+
+</html>
